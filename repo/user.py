@@ -12,3 +12,6 @@ def get_user_by_email(email):
             return user_data
         
     return None
+
+def register_user_repository(user_id, user_data):
+    users_db["users"].update({user_id: user_data})
