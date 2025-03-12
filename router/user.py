@@ -1,6 +1,6 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from auth.auth import login_required
-from views.user import get_users, register_user
+from views.user import get_user, register_user, update_user
 
 users_router = Blueprint("users_router", __name__, url_prefix="/users")
 
@@ -16,8 +16,8 @@ def current_user():
     match request.method.lower():
         # give list of all users users (list in users db)
         case "get":
-            return get_users(request.user)
+            return get_user(request.user)
 
         # update users
         case "put":
-            pass
+            return update_user(request.json,request.user)

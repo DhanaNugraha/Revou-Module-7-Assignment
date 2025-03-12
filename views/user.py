@@ -1,5 +1,5 @@
 from flask import jsonify
-from repo.user import get_all_users, register_user_repository
+from repo.user import get_all_users, register_user_repository, update_user_repository
 from datetime import datetime, timezone
 
 
@@ -15,24 +15,31 @@ user_key_fields = {
 
 empty_field_check = {"", None}
 
-# check for empty value
-
-
-def register_user(user_data):
+# missing data checker
+def missing_data_checker(user_data):
     user_data_keys = user_data.keys()
     user_data_values = user_data.values()
 
     missing_key = user_key_fields.difference(user_data_keys)
 
-    empty_value = empty_field_check.intersection(user_data_values)
+    missing_value = empty_field_check.intersection(user_data_values)
 
+    if missing_key or missing_value:
+        return (True, list(missing_key), list(missing_value))
+    
+    return (False, False, False)
+        
+    
+def register_user(user_data):
     # data checker
-    if missing_key or empty_value:
+    (incomplete, missing_key, missing_value) = missing_data_checker(user_data)
+
+    if incomplete:
         return jsonify(
             {
                 "message": {
-                    "missing key": f"{list(missing_key)}",
-                    "missing value": f"{list(empty_value)}",
+                    "missing key": f"{missing_key}",
+                    "missing value": f"{missing_value}",
                 },
                 "success": False,
             }
@@ -79,7 +86,44 @@ def register_user(user_data):
 # test -> no key, no value, duplicate email, 
 # error if key or value in dict type
 
-def get_users(user):
-    return jsonify({"data": user, "success": True}), 200
 
+def get_user(user_data):
+    return jsonify({"data": user_data, "success": True}), 200
 
+def update_user(user_request_data, user_token_data):
+    # data checker
+    (incomplete, missing_key, missing_value) = missing_data_checker(user_request_data)
+
+    if incomplete:
+        return jsonify(
+            {
+                "message": {
+                    "missing key": f"{missing_key}",
+                    "missing value": f"{missing_value}",
+                },
+                "success": False,
+            }
+        ), 400
+    
+    # check email with auth
+    authorized_email = user_token_data.get("email")
+    requested_email = user_request_data.get("email")
+
+    if authorized_email != requested_email:
+        return jsonify({"message": "You are not authorized to update this user. Make sure you input your registered email.", "success": False}), 400
+    
+    # inject user_id, accounts, create_time
+    user_request_data.update(
+        {
+            "user_id" : user_token_data["user_id"],
+            "accounts" : user_token_data["accounts"],
+            "created_at" : user_token_data["created_at"]   
+        }
+    )
+
+    update_user_repository(user_token_data["user_id"], user_request_data)
+
+    return jsonify({"message": "user updated succesfully", "success": True}), 200
+
+# test -> no key, no value, wrong email
+# error if key or value in dict type
