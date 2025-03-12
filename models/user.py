@@ -10,7 +10,7 @@ users_db = {
             "address": "123 Main St New York NY 10001 USA",
             "date_of_birth": "1990-01-01",
             "created_at": "01-01-2023",
-            "accounts": {"1": "A1", "2": "A2"},
+            "accounts": {1: "a1", 2: "a2"},
         },
         "u2": {
             "user_id": "u2",
@@ -23,7 +23,7 @@ users_db = {
             "date_of_birth": "1985-05-15",
             "created_at": "15-02-2023",
             "accounts": {
-                "1": "a3",
+                1: "a3",
             },
         },
     }

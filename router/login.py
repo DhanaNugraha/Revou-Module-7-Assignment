@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from views.login import login
 
 login_router = Blueprint("login_router", __name__, url_prefix="/login")

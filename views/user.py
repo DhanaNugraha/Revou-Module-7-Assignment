@@ -1,6 +1,7 @@
 from flask import jsonify
 from repo.user import get_all_users, register_user_repository, update_user_repository
 from datetime import datetime, timezone
+from views.data_checker import missing_data_checker
 
 
 user_key_fields = {
@@ -12,27 +13,10 @@ user_key_fields = {
     "address",
     "date_of_birth",
 }
-
-empty_field_check = {"", None}
-
-# missing data checker
-def missing_data_checker(user_data):
-    user_data_keys = user_data.keys()
-    user_data_values = user_data.values()
-
-    missing_key = user_key_fields.difference(user_data_keys)
-
-    missing_value = empty_field_check.intersection(user_data_values)
-
-    if missing_key or missing_value:
-        return (True, list(missing_key), list(missing_value))
-    
-    return (False, False, False)
-        
-    
+   
 def register_user(user_data):
     # data checker
-    (incomplete, missing_key, missing_value) = missing_data_checker(user_data)
+    (incomplete, missing_key, missing_value) = missing_data_checker(user_data, user_key_fields)
 
     if incomplete:
         return jsonify(
@@ -92,7 +76,7 @@ def get_user(user_data):
 
 def update_user(user_request_data, user_token_data):
     # data checker
-    (incomplete, missing_key, missing_value) = missing_data_checker(user_request_data)
+    (incomplete, missing_key, missing_value) = missing_data_checker(user_request_data, user_key_fields)
 
     if incomplete:
         return jsonify(
