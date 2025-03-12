@@ -51,6 +51,20 @@ post is 201
 failed login 401
 
 
+
+auth flow:
+
+post login (email, pass) - > get token
+
+do an activity:
+
+middleware before -> checks token in header -> assign user variable to request
+
+activity auth wrapper -> checks for user in request.user 
+
+do activity if all clear
+
+
 <!-- 
 uv run main.py
 flask --app main run

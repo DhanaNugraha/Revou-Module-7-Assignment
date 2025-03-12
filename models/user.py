@@ -1,11 +1,12 @@
 users_db = {
     "users": {
         "u1": {
-            "userId": "u1",
-            "firstName": "John",
-            "lastName": "Doe",
+            "user_id": "u1",
+            "first_name": "John",
+            "last_name": "Doe",
             "email": "john.doe@example.com",
-            "phoneNumber": "+1234567890",
+            "password": "password123",
+            "phone_number": "+1234567890",
             "address": {
                 "street": "123 Main St",
                 "city": "New York",
@@ -13,16 +14,17 @@ users_db = {
                 "postalCode": "10001",
                 "country": "USA",
             },
-            "dateOfBirth": "1990-01-01",
-            "createdAt": "01-01-2023",
+            "date_of_birth": "1990-01-01",
+            "created_at": "01-01-2023",
             "accounts": {"1": "A1", "2": "A2"},
         },
         "u2": {
-            "userId": "u2",
-            "firstName": "Jane",
-            "lastName": "Smith",
+            "user_id": "u2",
+            "first_name": "Jane",
+            "last_name": "Smith",
             "email": "jane.smith@example.com",
-            "phoneNumber": "+0987654321",
+            "password": "password1234",
+            "phone_number": "+0987654321",
             "address": {
                 "street": "456 Elm St",
                 "city": "Los Angeles",
@@ -30,8 +32,8 @@ users_db = {
                 "postalCode": "90001",
                 "country": "USA",
             },
-            "dateOfBirth": "1985-05-15",
-            "createdAt": "15-02-2023",
+            "date_of_birth": "1985-05-15",
+            "created_at": "15-02-2023",
             "accounts": {
                 "1": "a3",
             },
