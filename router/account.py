@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from auth.auth import login_required
-from views.account import register_account
+from views.account import get_user_accounts, register_account
 
 
 accounts_router = Blueprint("accounts_router", __name__, url_prefix="/accounts")
@@ -11,7 +11,7 @@ def accounts_api():
     match request.method.lower():
         # give list of all user accounts (list in user db)
         case "get":
-            pass
+            return get_user_accounts(request.user)
         # create new accounts (add to user db and accounts db)
         case "post":
             return register_account(request.json, request.user)

@@ -4,10 +4,11 @@ from repo.account import (
     register_account_in_user_repository,
     register_account_repository,
     update_account_repository,
+    get_accounts_by_user_id
 )
 from datetime import datetime, timezone
-
 from views.data_checker import missing_data_checker
+
 
 account_key_fields = {"currency", "account_type"}
 
@@ -62,7 +63,6 @@ def register_account(account_data, user_auth_data):
         }
     )
 
-
     # register account
     register_account_repository(formatted_account_id, account_data)
 
@@ -77,3 +77,14 @@ def register_account(account_data, user_auth_data):
             "success": True,
         }
     ), 201
+
+
+def get_user_accounts(user_auth_data):
+    user_id = user_auth_data["user_id"]
+    user_accounts = list(get_accounts_by_user_id(user_id).values())
+
+    return jsonify({"data": user_accounts, "success": True}), 200
+
+# def get_account_details
+
+# def update_account_detail

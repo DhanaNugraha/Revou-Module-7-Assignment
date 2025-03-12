@@ -7,14 +7,9 @@ from repo.user import get_all_users
 def get_all_accounts():
     return copy.deepcopy(accounts_db["accounts"])
 
-def get_account_by_user_id(user_id):
-    all_accounts = get_all_accounts()
-
-    for account_id, account_data in all_accounts.items():
-        if account_data["user_id"] == user_id:
-            return account_data
-
-    return None
+def get_accounts_by_user_id(user_id):
+    user = get_all_users()[user_id]
+    return user["accounts"]
 
 
 def register_account_repository(account_id, account_data):
@@ -33,4 +28,3 @@ def register_account_in_user_repository(user_id, account_id):
 
 def update_account_repository(account_id, account_data):
     accounts_db["accounts"].update({account_id: account_data})
-    
