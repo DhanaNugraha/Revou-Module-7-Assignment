@@ -1,5 +1,6 @@
 from flask import jsonify
 from repo.account import (
+    delete_account_repository,
     get_account_by_account_id,
     get_all_accounts,
     register_account_in_user_repository,
@@ -104,14 +105,31 @@ def update_account_details(account_id, account_request_data):
             }
         ), 400
 
-    update_account_repository(account_id, account_request_data)
+    try:
+        update_account_repository(account_id, account_request_data)
+    
+    except Exception as e:
+        return jsonify({"message": str(e), "success": False}), 401
 
     return jsonify({"message": "account updated succesfully", "success": True}), 200
 
+
 def get_account_details(account_id):
-    account_data = get_account_by_account_id(account_id)
+    try:
+        account_data = get_account_by_account_id(account_id)
+    
+    except Exception as e:
+        print(e)
+        return jsonify({"message": str(e), "success": False}), 401
+    
     return jsonify({"data": account_data, "success": True}), 200
 
 # (delete from user list as well)
 def delete_account(account_id, user_auth_data):
-    pass
+    try: 
+        delete_account_repository(account_id, user_auth_data["user_id"])
+
+    except Exception as e:
+        return jsonify({"message": str(e), "success": False}), 401
+    
+    return jsonify({"message": "account deleted succesfully", "success": True}), 200
