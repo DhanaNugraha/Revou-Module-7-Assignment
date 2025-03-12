@@ -20,4 +20,4 @@ def current_user():
 
         # update users
         case "put":
-            return update_user(request.json,request.user)
+            return update_user(request.json, request.user)

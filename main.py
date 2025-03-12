@@ -18,3 +18,4 @@ def before_request():
     if token:
         request.user = claim_user_from_token(token)
 
+

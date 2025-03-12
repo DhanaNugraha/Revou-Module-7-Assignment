@@ -1,5 +1,6 @@
 from flask import jsonify
 from repo.account import (
+    get_account_by_account_id,
     get_all_accounts,
     register_account_in_user_repository,
     register_account_repository,
@@ -85,6 +86,32 @@ def get_user_accounts(user_auth_data):
 
     return jsonify({"data": user_accounts, "success": True}), 200
 
-# def get_account_details
 
-# def update_account_detail
+def update_account_details(account_id, account_request_data):
+    # data checker
+    (incomplete, missing_key, missing_value) = missing_data_checker(
+        account_request_data, account_key_fields
+    )
+
+    if incomplete:
+        return jsonify(
+            {
+                "message": {
+                    "missing key": f"{missing_key}",
+                    "missing value": f"{missing_value}",
+                },
+                "success": False,
+            }
+        ), 400
+
+    update_account_repository(account_id, account_request_data)
+
+    return jsonify({"message": "account updated succesfully", "success": True}), 200
+
+def get_account_details(account_id):
+    account_data = get_account_by_account_id(account_id)
+    return jsonify({"data": account_data, "success": True}), 200
+
+# (delete from user list as well)
+def delete_account(account_id, user_auth_data):
+    pass

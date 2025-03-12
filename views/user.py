@@ -74,7 +74,7 @@ def register_user(user_data):
 def get_user(user_data):
     return jsonify({"data": user_data, "success": True}), 200
 
-def update_user(user_request_data, user_token_data):
+def update_user(user_request_data, user_auth_data):
     # data checker
     (incomplete, missing_key, missing_value) = missing_data_checker(user_request_data, user_key_fields)
 
@@ -90,7 +90,7 @@ def update_user(user_request_data, user_token_data):
         ), 400
     
     # check email with auth
-    authorized_email = user_token_data.get("email")
+    authorized_email = user_auth_data.get("email")
     requested_email = user_request_data.get("email")
 
     if authorized_email != requested_email:
@@ -99,13 +99,13 @@ def update_user(user_request_data, user_token_data):
     # inject user_id, accounts, create_time
     user_request_data.update(
         {
-            "user_id" : user_token_data["user_id"],
-            "accounts" : user_token_data["accounts"],
-            "created_at" : user_token_data["created_at"]   
+            "user_id" : user_auth_data["user_id"],
+            "accounts" : user_auth_data["accounts"],
+            "created_at" : user_auth_data["created_at"]   
         }
     )
 
-    update_user_repository(user_token_data["user_id"], user_request_data)
+    update_user_repository(user_auth_data["user_id"], user_request_data)
 
     return jsonify({"message": "user updated succesfully", "success": True}), 200
 
