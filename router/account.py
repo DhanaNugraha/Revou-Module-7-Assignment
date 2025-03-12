@@ -4,7 +4,7 @@ accounts_router = Blueprint("accounts_router", __name__, url_prefix="/accounts")
 
 @accounts_router.route("", methods=["GET", "POST"])
 def accounts_api():
-    match request.method:
+    match request.method.lower():
         # give list of all user accounts (list in user db)
         case "get":
             pass
@@ -14,7 +14,7 @@ def accounts_api():
 
 @accounts_router.route("/<account_id>", methods=["GET", "PUT", "DELETE"])
 def accounts_by_id():
-    match request.method:
+    match request.method.lower():
         # give list of all user accounts (list in user db)
         case "get":
             pass

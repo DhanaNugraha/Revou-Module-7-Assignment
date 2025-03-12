@@ -5,7 +5,7 @@ transactions_router = Blueprint("transactions_router", __name__, url_prefix="/tr
 
 @transactions_router.route("", methods=["GET", "POST"])
 def transactions_api():
-    match request.method:
+    match request.method.lower():
         # give list of all user transactions (list in user db)
         case "get":
             pass
@@ -16,7 +16,7 @@ def transactions_api():
 
 @transactions_router.route("/<transaction_id>", methods=["GET"])
 def transactions_by_id():
-    match request.method:
+    match request.method.lower():
         # give list of user transaction by id
         case "get":
             pass

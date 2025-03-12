@@ -1,5 +1,6 @@
 from flask import jsonify
 from repo.user import get_all_users, register_user_repository
+from datetime import datetime, timezone
 
 
 user_key_fields = {
@@ -10,22 +11,29 @@ user_key_fields = {
     "phone_number",
     "address",
     "date_of_birth",
-    "created_at",
 }
 
-empty_check = {"", None}
+empty_field_check = {"", None}
+
+# check for empty value
 
 
 def register_user(user_data):
     user_data_keys = user_data.keys()
+    user_data_values = user_data.values()
+
+    missing_key = user_key_fields.difference(user_data_keys)
+
+    empty_value = empty_field_check.intersection(user_data_values)
 
     # data checker
-    if user_data_keys != user_key_fields:
-        missing_data = user_key_fields.difference(user_data_keys)
-
+    if missing_key or empty_value:
         return jsonify(
             {
-                "message": {"missing data": f"{list(missing_data)}"},
+                "message": {
+                    "missing key": f"{list(missing_key)}",
+                    "missing value": f"{list(empty_value)}",
+                },
                 "success": False,
             }
         ), 400
@@ -45,18 +53,29 @@ def register_user(user_data):
             ), 400
 
     # get the highest current registerd id "uxx"
-    current_max_user_id = max(users.keys(), key = lambda x: int(x.replace("u", "")))
-    
-    # format register id 
+    current_max_user_id = max(users.keys(), key=lambda x: int(x.replace("u", "")))
+
+    # format register id
     user_id = f"u{int(current_max_user_id.replace('u', '')) + 1}"
 
-    # inject user_id and accounts
-    user_data.update({"user_id": user_id, "accounts": {}})
+    # get current time in utc
+    now_utc = datetime.now(timezone.utc).isoformat()
+
+    # inject user_id, accounts, create time
+    user_data.update({"user_id": user_id, "accounts": {}, "created_at": now_utc})
 
     # register user
     register_user_repository(user_id, user_data)
 
-    # print(all_users_repository())
     return jsonify(
-        {"data": {"message": f"{request_email} registered successfully! with user id {user_id}"}, "success": True}
+        {
+            "data": {
+                "message": f"{request_email} registered successfully! with user id {user_id}"
+            },
+            "success": True,
+        }
     ), 201
+
+
+# test -> no key, no value, duplicate email, 
+# error if key or value in dict type
