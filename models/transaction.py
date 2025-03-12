@@ -1,20 +1,22 @@
 transactions_db = {
     "transactions": {
-        "a1" : {
-            "a1t1" : {
+        "a1": {
+            "a1t1": {
                 "transactionId": "a1t1",
                 "accountId": "a1",
-                "type": "debit",
+                "type": "transfer",
+                "paymentMethod": "card",
                 "amount": 100.00,
                 "currency": "USD",
                 "description": "Grocery store purchase",
                 "transactionDate": "01-02-2023",
                 "status": "completed",
             },
-            "a1t2" : {
+            "a1t2": {
                 "transactionId": "a1t2",
                 "accountId": "a1",
-                "type": "credit",
+                "type": "deposit",
+                "paymentMethod": "credit",
                 "amount": 500.00,
                 "currency": "USD",
                 "description": "Salary deposit",
@@ -22,17 +24,18 @@ transactions_db = {
                 "status": "completed",
             },
         },
-        "a2" : {
-            "a2t1" : {
+        "a2": {
+            "a2t1": {
                 "transactionId": "a2t1",
                 "accountId": "a2",
-                "type": "debit",
+                "type": "transfer",
+                "paymentMethod": "debit",
                 "amount": 200.00,
                 "currency": "USD",
                 "description": "Utility bill payment",
                 "transactionDate": "02-11-2023",
                 "status": "completed",
             },
-        }
+        },
     }
 }
