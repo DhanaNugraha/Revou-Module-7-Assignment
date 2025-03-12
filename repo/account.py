@@ -33,3 +33,4 @@ def register_account_in_user_repository(user_id, account_id):
 
 def update_account_repository(account_id, account_data):
     accounts_db["accounts"].update({account_id: account_data})
+    
