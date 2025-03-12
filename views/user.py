@@ -76,6 +76,10 @@ def register_user(user_data):
         }
     ), 201
 
-
 # test -> no key, no value, duplicate email, 
 # error if key or value in dict type
+
+def get_users(user):
+    return jsonify({"data": user, "success": True}), 200
+
+

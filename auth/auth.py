@@ -15,8 +15,6 @@ def get_token(email, id):
 def claim_user_from_token(token):
     token_user_data = base64.b64decode(token).decode().split(":")
 
-    print(token_user_data)
-
     email = token_user_data[0]
     user = get_user_by_email(email)
     user.pop("password")

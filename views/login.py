@@ -9,6 +9,6 @@ def login(login_request_data):
 
     assert user_data["password"] == password, "Incorrect password"
 
-    token = get_token(email, user_data["id"])
+    token = get_token(email, user_data["user_id"])
 
     return jsonify({"data": {"token": token}, "success": True}), 200
