@@ -28,7 +28,7 @@ transactions_db = {
             "a2t1": {
                 "transaction_id": "a2t1",
                 "account_id": "a2",
-                "type": "transfer",
+                "type": "withdrawal",
                 "payment_method": "debit",
                 "amount": 200.00,
                 "currency": "USD",
