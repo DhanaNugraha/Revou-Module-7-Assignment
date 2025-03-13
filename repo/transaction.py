@@ -10,8 +10,6 @@ def get_all_transactions():
 
 def get_account_transactions_repository(account_id):
     account_transactions = get_all_transactions().get(account_id)
-    print("+"*30)
-    print(account_transactions, account_id)
 
     if account_transactions:
         return account_transactions
