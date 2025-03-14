@@ -1,75 +1,69 @@
-uv python pin 3.11.11
-uv init
-uv add flask
+# RevoBank Application API
 
-close terminal and open again
-wait for venv popup
-if no popup repeat
+## Overview
+This API provides a comprehensive set of endpoints for managing users, accounts, and transactions in a banking application. Built using **uv** python package and project manager as well as **Flask** for the virtual environment. It supports user authentication, account management, and transaction processing.
 
-to run normally
-uv run python main.py
+## Features Implemented
+1. **User Management**:
+   - Create a new user account.
+   - Retrieve and update the profile of the currently logged-in user.
 
-to run flask
-uv run -- flask --app main run --debug --reload -p 3000    this works or
-uv run -- flask --app main run --debug --reload --port 3000 
+2. **Authentication**:
+   - Login to an existing user account.
 
-keep changing port to mitigate error
+3. **Account Management**:
+   - Retrieve a list of all accounts or details of a specific account.
+   - Create, update, or delete an account.
 
-when pulling do:
-uv add flask
+4. **Transaction Management**:
+   - Retrieve a list of all transactions or details of a specific transaction.
+   - Initiate new transactions (deposit, withdrawal, or transfer).
 
-<!--  -->
-next version:
-uv python pin 3.11.11
-uv init
-uv add flask
-uv add taskipy
-(folder management follow this file)
+## Installation and Setup
 
-close terminal and open again
-wait for venv popup
-if no popup repeat
+### Prerequisites
+- uv installed
 
-add in bottom of toml
-[tool.taskipy.tasks]
-fr = "flask --app main run --port 3000 --debug --reload"
+### Steps
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-repo/bank-app-api.git
+   cd Revou-Module-7-Assignment
+   ```
 
-use   uv run task fr   to run file
+2. Install all dependencies:
+   ```
+   uv sync
+   ```
 
+3. Run the application:
+   ```
+   uv run task fr
+   ```
 
-BEFORE YOU START CODING: 
-1. make a dummy db with correct format
-2. before making each method make sure what format goes in and out
-3. dont forget to make code for when data is wrong, unavailable, or already present in db
-4. coding flow : db -> main -> router -> view -> repo
+4. The API will be available at `http://127.0.0.1:3005`.
+   
+5. Run the tests:
+   ```
+   uv run pytest -v -s --cov=.
+   ```
 
-delete is 204
-get is 200
-not found is 404
-input not complete is 400
-post is 201
-failed login 401
+## API Usage Documentation
 
+The full documentation of each endpoints, along with their request requirements and expected  response are shown in [API Documentation](https://z03lzbuu5z.apidog.io/get-account-details-14807137e0)
 
-
-auth flow:
-
-post login (email, pass) - > get token
-
-do an activity:
-
-middleware before -> checks token in header -> assign user variable to request
-
-activity auth wrapper -> checks for user in request.user 
-
-do activity if all clear
+### Base URL
+`http://127.0.0.1:3005`
 
 
-<!-- 
-uv run main.py
-flask --app main run
-flask --app main run --debug --reload (to test in) -->
+## Contributing
+Contributions are welcome! Please feel free to submit a Pull Request.
 
+---
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
+---
 
-
+## Contact
+For questions or support, please contact [dhananugraha1511@gmail.com](mailto:dhananugraha1511@gmail.com).
