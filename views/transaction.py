@@ -36,6 +36,8 @@ def initiate_transaction(transaction_data, user_auth_data):
     account_id = transaction_data.get("account_id")
     account_data = get_account_by_account_id(account_id)
 
+    assert account_data, "account does not exist"
+
     # check currency
     if transaction_data.get("currency").lower() != account_data.get("currency").lower():
         return jsonify(

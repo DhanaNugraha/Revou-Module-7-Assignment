@@ -15,7 +15,10 @@ def transactions_api():
             return get_user_account_transactions(request.user)
         # create new transaction (add to user db and transactions db)
         case "post":
-            return initiate_transaction(request.json, request.user)
+            try:
+                return initiate_transaction(request.json, request.user)
+            except Exception as e:
+                return {"success": False, "message": str(e)}, 400
 
 
 @transactions_router.route("/<transaction_id>", methods=["GET"])
