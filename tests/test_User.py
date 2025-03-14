@@ -1,5 +1,10 @@
-from flask import request
+from flask import request, g
+import flask
+from main import app
+from views.user import get_user, update_user
+from router.user import users_api, current_user
 
+# uv run pytest -v -s --cov=.
 
 def test_register_user(client, mock_user_data):
     register_user = client.post("/users", json=mock_user_data)
@@ -8,30 +13,45 @@ def test_register_user(client, mock_user_data):
     assert register_user.status_code == 201
     assert register_user.json["success"] is True
 
-def test_login_user(client, mock_login_data, mock_token_data):
-    login_user = client.post("/login", json= mock_login_data)
-    print(login_user)
 
-    assert login_user.status_code == 200
-    assert login_user.json["success"] is True
-    assert login_user.json["data"]["token"] == mock_token_data["Authorization"]
+def test_get_user(client, mock_auth_user_data, mock_token_data):
+    with client.application.test_request_context(
+        "/users/me", method="GET", headers=mock_token_data
+    ):  
+        app.preprocess_request()
+        print(flask.request.user) 
+
+        response = current_user()[0]
+        print(response)
+        assert response.status_code == 200
+        assert response.json["success"] is True
+        assert len(response.json["data"]) == 9
+
+
+def test_update_user(client, mock_update_user_data, mock_token_data):
+    with client.application.test_request_context(
+        "/users/me", method="PUT", headers= mock_token_data, json= mock_update_user_data
+    ):  
+        app.preprocess_request()
+        print(flask.request.user) 
+
+        response = current_user()[0]
+        print(response)
+        assert response.status_code == 200
+        assert response.json["success"] is True
+        assert response.json["message"] == "user updated successfully"
 
 
 
-# def test_middleware(client, mock_token_data,mock_auth_user_data):
-#     print(mock_token_data)
-#     response = client.get("/users/me", headers=mock_token_data)
+    # get_user = client.get("/users/me", headers=mock_token_data)
 
-#     with client.application.test_request_context(
-#         "/users/me", method="GET", headers=mock_token_data
-#     ):  
-#         client.preprocess_request()
-#         print("testttt")
-#         print(request)
-#         print(request.headers)
-#         assert response.status_code == 200
-        # assert response.json["data"]["email"] == "john.doe@example.com"
-        # assert response.json["data"].get("password") is None
+    # assert get_user.status_code == 200
+
+    # assert get_user.status_code == 200
+    # assert get_user.json["success"] is True
+
+
+# def 
 
 # def test_get_user(client, mock_auth_user_data):
 #     get_user = client.get("/users/me", user= mock_auth_user_data)

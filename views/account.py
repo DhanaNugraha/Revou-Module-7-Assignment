@@ -111,7 +111,7 @@ def update_account_details(account_id, account_request_data):
     except Exception as e:
         return jsonify({"message": str(e), "success": False}), 401
 
-    return jsonify({"message": "account updated succesfully", "success": True}), 200
+    return jsonify({"message": "account updated successfully", "success": True}), 200
 
 
 def get_account_details(account_id):
@@ -132,4 +132,4 @@ def delete_account(account_id, user_auth_data):
     except Exception as e:
         return jsonify({"message": str(e), "success": False}), 401
     
-    return jsonify({"message": "account deleted succesfully", "success": True}), 200
+    return jsonify({"message": "account deleted successfully", "success": True}), 200

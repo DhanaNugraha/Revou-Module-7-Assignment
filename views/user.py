@@ -107,7 +107,7 @@ def update_user(user_request_data, user_auth_data):
 
     update_user_repository(user_auth_data["user_id"], user_request_data)
 
-    return jsonify({"message": "user updated succesfully", "success": True}), 200
+    return jsonify({"message": "user updated successfully", "success": True}), 200
 
 # test -> no key, no value, wrong email
 # error if key or value in dict type

@@ -4,7 +4,6 @@ from views.user import get_user, register_user, update_user
 
 users_router = Blueprint("users_router", __name__, url_prefix="/users")
 
-
 @users_router.route("", methods=["POST"])
 def users_api():
     return register_user(request.json)
@@ -14,8 +13,8 @@ def users_api():
 @login_required
 def current_user():
     match request.method.lower():
-        # give list of all users users (list in users db)
         case "get":
+            print("hereee")
             return get_user(request.user)
 
         # update users
