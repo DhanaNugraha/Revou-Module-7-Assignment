@@ -35,6 +35,7 @@ This API provides a comprehensive set of endpoints for managing users, accounts,
    ```
    uv sync
    ```
+   Kill and restart terminal to run the terminal using the virtual environment.
 
 3. Run the application:
    ```
