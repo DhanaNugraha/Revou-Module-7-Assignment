@@ -1,20 +1,14 @@
-from flask import Flask, request
-from router.user import users_router
-from router.transaction import transactions_router
-from router.account import accounts_router
-from router.login import login_router
+from flask import request
 from auth.auth import claim_user_from_token
+from config.settings import create_app
 
-
-app = Flask(__name__)
-app.register_blueprint(users_router)
-app.register_blueprint(transactions_router)
-app.register_blueprint(accounts_router)
-app.register_blueprint(login_router)
+app = create_app()
 
 @app.before_request
 def before_request():
+    print("hereeeeeeeeeee")
     token = request.headers.get("Authorization")
+    print("Thosssss",token)
     if token:
         request.user = claim_user_from_token(token)
 
