@@ -2,7 +2,7 @@ from flask import request
 from auth.auth import claim_user_from_token
 from config.settings import create_app
 
-app = create_app()
+app = create_app("config.local")
 
 @app.before_request
 def before_request():

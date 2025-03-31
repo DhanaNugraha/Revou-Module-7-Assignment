@@ -4,11 +4,11 @@ from config.settings import create_app
 
 @pytest.fixture
 def test_app():
-    app = create_app()
+    app = create_app("config.testing")
 
-    app.config.update({
-        "TESTING": True
-    })
+    # app.config.update({
+    #     "TESTING": True
+    # })
     yield app
 
 @pytest.fixture
