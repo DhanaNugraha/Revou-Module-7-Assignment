@@ -1,5 +1,5 @@
 import flask
-from main import app
+from app import app
 from router.transaction import transactions_api, transactions_by_id
 
 # uv run pytest -v -s --cov=.

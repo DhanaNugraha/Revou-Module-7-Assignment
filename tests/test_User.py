@@ -1,6 +1,6 @@
 from flask import request, g
 import flask
-from main import app
+from app import app
 from views.user import get_user, update_user
 from router.user import users_api, current_user
 

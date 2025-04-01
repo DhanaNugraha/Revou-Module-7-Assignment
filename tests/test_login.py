@@ -1,4 +1,4 @@
-from main import app
+from app import app
 
 def test_login_user(client, mock_login_data, mock_token_data):
     login_user = client.post("/login", json=mock_login_data)

@@ -1,5 +1,5 @@
 import flask
-from main import app
+from app import app
 from router.account import accounts_api, accounts_by_id
 
 # uv run pytest -v -s --cov=.

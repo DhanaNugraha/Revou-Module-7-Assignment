@@ -6,10 +6,13 @@ readme = "README.md"
 requires-python = ">=3.11.11"
 dependencies = [
     "flask>=3.1.0",
+    "flask-migrate>=4.1.0",
+    "flask-sqlalchemy>=3.1.1",
+    "psycopg2-binary>=2.9.10",
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "taskipy>=1.14.1",
 ]
 
 [tool.taskipy.tasks]
-fr = "flask --app main run --port 3005 --debug --reload"
+fr = "flask --app app run --port 3005 --debug --reload"

@@ -1,3 +1,28 @@
+from instance.database import db
+from shared import time
+
+
+class AccountsModel(db.Model):
+    __tablename__ = 'accounts'
+    id = db.Column(db.Integer, primary_key=True)
+    account_type = db.Column(db.String(20))
+    account_number = db.Column(db.Integer, unique=True)
+    balance = db.Column(db.Float(precision=2))
+    currency = db.Column(db.String(10))
+    created_at = db.Column(db.DateTime, default=time.now)
+    updated_at = db.Column(db.DateTime, default=time.now, onupdate=time.now)
+    status = db.Column(db.String(10))
+
+    # relationships
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('UsersModel', back_populates='accounts')
+
+    transactions = db.relationship('TransactionsModel', back_populates='account', lazy="dynamic")
+
+    
+
+
+
 accounts_db = {
     "accounts": {
         "a1": {
