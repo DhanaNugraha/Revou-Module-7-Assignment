@@ -3,6 +3,46 @@ from models.account import accounts_db
 from repo.account import get_all_accounts
 import copy
 
+from instance.database import db
+from models.transaction import TransactionsModel
+
+def create_transaction_repo(transaction_data):
+    new_transaction = TransactionsModel(    
+        # id = db.Column(db.Integer, primary_key=True)
+        type = transaction_data.type,
+        payment_method = transaction_data.payment_method,
+        amount = transaction_data.amount,
+        currency = transaction_data.currency,
+        description = transaction_data.description, 
+        created_at = transaction_data.created_at,
+        status = transaction_data.status,
+        account_id = transaction_data.account_id, 
+    )
+    db.session.add(new_transaction)
+    db.session.commit()
+
+def account_transactions_repo(account_id):
+    transactions = db.session.execute(db.select(TransactionsModel).filter_by(account_id=account_id)).scalars()
+
+    cleaned_transaction_list = []
+
+    for transaction in transactions:
+        cleaned_transaction_list.append({
+            "id": transaction.id,
+        })
+    
+    return cleaned_transaction_list
+
+def transaction_by_id_repo(transaction_id):
+    transaction = db.one_or_404(
+        db.select(TransactionsModel).filter_by(id=transaction_id),
+        description=f"No transaction with id '{transaction_id}'.",
+    )
+    return transaction
+
+
+
+
 
 def get_all_transactions():
     return copy.deepcopy(transactions_db["transactions"])
@@ -44,6 +84,7 @@ def create_transaction_id(account_id):
     return f"{account_id}t{transaction_number}"
 
 
+# move to views then call update account
 def modify_user_balance_repository(transaction_data):
     transaction_type = transaction_data.get("type").lower()
     transaction_amount = transaction_data.get("amount")

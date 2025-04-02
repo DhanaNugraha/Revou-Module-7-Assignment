@@ -1,8 +1,64 @@
 from models.account import accounts_db
 from models.user import users_db
 import copy
-
 from repo.user import get_all_users
+
+from instance.database import db
+from models.account import AccountsModel
+
+
+def create_account_repo(account_data):
+    new_account = AccountsModel(
+        account_number = account_data.account_number,
+        balance = account_data.balance,
+        currency = account_data.currency,
+        created_at = account_data.created_at,
+        updated_at = account_data.updated_at,
+        status = account_data.status,
+        user_id = account_data.user_id
+    )
+    db.session.add(new_account)
+    db.session.commit()
+
+def update_account_repo(account_data):
+    new_account = AccountsModel(
+        id = account_data.id,
+        account_number = account_data.account_number,
+        balance = account_data.balance,
+        currency = account_data.currency,
+        created_at = account_data.created_at,
+        updated_at = account_data.updated_at,
+        status = account_data.status,
+        user_id = account_data.user_id
+    )
+    db.session.add(new_account)
+    db.session.commit()
+
+def delete_account_repo(account_id):
+    account = db.one_or_404(
+        db.select(AccountsModel).filter_by(id=account_id),
+        description=f"No user with id'{account_id}'.",
+    )
+    db.session.delete(account)
+    db.session.commit()
+
+def account_by_account_id_repo(account_id):
+    account = db.one_or_404(
+        db.select(AccountsModel).filter_by(id=account_id),
+        description=f"No user with account id '{account_id}'.",
+    )
+    return account
+
+def account_by_user_id_repo(user_id):
+    account = db.one_or_404(
+        db.select(AccountsModel).filter_by(user_id=user_id),
+        description=f"No user with user id '{user_id}'.",
+    )
+    return account
+
+
+
+
 
 def get_all_accounts():
     return copy.deepcopy(accounts_db["accounts"])
