@@ -6,7 +6,7 @@ class AccountsModel(db.Model):
     __tablename__ = 'accounts'
     id = db.Column(db.Integer, primary_key=True)
     account_type = db.Column(db.String(20))
-    account_number = db.Column(db.Integer, unique=True)
+    account_number = db.Column(db.String(10), unique=True)
     balance = db.Column(db.Float(precision=2))
     currency = db.Column(db.String(10))
     created_at = db.Column(db.DateTime, default=time.now)
