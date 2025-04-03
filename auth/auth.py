@@ -25,6 +25,8 @@ def claim_user_from_token(token):
         "phone_number": user.phone_number,
         "address": user.address,
         "date_of_birth": user.date_of_birth,
+        "created_at": user.created_at,
+        "updated_at": user.updated_at
     }
 
     return filtered_user

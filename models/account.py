@@ -7,11 +7,11 @@ class AccountsModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     account_type = db.Column(db.String(20))
     account_number = db.Column(db.String(10), unique=True)
-    balance = db.Column(db.Float(precision=2))
+    balance = db.Column(db.Float(precision=2), default=0.00)
     currency = db.Column(db.String(10))
     created_at = db.Column(db.DateTime, default=time.now)
     updated_at = db.Column(db.DateTime, default=time.now, onupdate=time.now)
-    status = db.Column(db.String(10))
+    status = db.Column(db.String(10), default="active")
 
     # relationships
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
