@@ -27,17 +27,17 @@ def user_by_email_repo(email):
     return user
 
 def user_update_repo(user_data):
-    updated_user = UsersModel(
-        email=user_data.email,
-        first_name = user_data.first_name,
-        last_name = user_data.last_name,
-        password = user_data.password,
-        phone_number = user_data.phone_number,
-        address = user_data.address,
-        date_of_birth = user_data.date_of_birth,
-        updated_at = time.now,
-    )
-    db.session.add(updated_user)
+
+    user = user_by_email_repo(user_data.email)
+
+    user.first_name = user_data.first_name
+    user.last_name = user_data.last_name
+    user.password = user_data.password
+    user.phone_number = user_data.phone_number
+    user.address = user_data.address
+    user.date_of_birth = user_data.date_of_birth
+    # updated at ada di model
+
     db.session.commit()
 
 

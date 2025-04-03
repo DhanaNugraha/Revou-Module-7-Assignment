@@ -4,7 +4,7 @@
 # from views.data_checker import missing_data_checker
 
 from flask import jsonify
-from repo.user import create_user_repo
+from repo.user import create_user_repo, user_update_repo
 from pydantic import BaseModel, ValidationError
 
 class userRequest(BaseModel):
@@ -55,8 +55,6 @@ def update_user(user_data_request, user_auth_data):
     except ValidationError as e:
         return jsonify({"message": str(e), "success": False}), 400
 
-    print(user_auth_data.get("email"))
-    print(user_data_validated.email)
     if user_auth_data.get("email") != user_data_validated.email:
         return jsonify(
             {
@@ -64,6 +62,12 @@ def update_user(user_data_request, user_auth_data):
                 "success": False,
             }
         ), 400
+    
+    try:
+        user_update_repo(user_data_validated)
+
+    except Exception as e:
+        return jsonify({"message": str(e), "success": False}), 400
 
     return jsonify(
         {
