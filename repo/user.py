@@ -1,12 +1,8 @@
-from models.user import users_db
-import copy
-
 from instance.database import db
 from models.user import UsersModel
 from shared import time
 
 def create_user_repo(user_data):
-    print(user_data.first_name)
     new_user = UsersModel(
         first_name = user_data.first_name,
         last_name = user_data.last_name,
@@ -39,31 +35,4 @@ def user_update_repo(user_data):
     # updated at ada di model
 
     db.session.commit()
-
-
-
-
-
-
-def get_all_users():
-    return copy.deepcopy(users_db["users"])
-
-# def get_user_by_email(email):
-#     all_users = get_all_users()
-
-#     for user_id, user_data in all_users.items():
-#         if user_data["email"] == email:
-#             return user_data
-               
-#     return None
-
-# def register_user_repository(user_id, user_data):
-#     users_db["users"].update({user_id: user_data})
-#     # print(users_db["users"])
-
-# def update_user_repository(user_id, user_data):
-#     users_db["users"].update({user_id: user_data})
-
-
-
 
