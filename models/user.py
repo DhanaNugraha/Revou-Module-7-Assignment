@@ -14,7 +14,7 @@ class UsersModel(db.Model):
     created_at = db.Column(db.DateTime, default=time.now)
     updated_at = db.Column(db.DateTime, default=time.now, onupdate=time.now)
     # relationships
-    accounts = db.relationship("AccountsModel", back_populates="user", lazy="dynamic")
+    accounts = db.relationship("AccountsModel", backref="user")
 
 
 users_db = {

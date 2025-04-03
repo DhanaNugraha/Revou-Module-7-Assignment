@@ -15,9 +15,9 @@ class AccountsModel(db.Model):
 
     # relationships
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('UsersModel', back_populates='accounts')
+    # user = db.relationship('UsersModel', back_populates='accounts')
 
-    transactions = db.relationship('TransactionsModel', back_populates='account', lazy="dynamic")
+    transactions = db.relationship('TransactionsModel', backref='account')
 
     
 

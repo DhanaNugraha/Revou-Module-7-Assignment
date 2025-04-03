@@ -9,6 +9,7 @@ dependencies = [
     "flask-migrate>=4.1.0",
     "flask-sqlalchemy>=3.1.1",
     "psycopg2-binary>=2.9.10",
+    "pydantic>=2.11.1",
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
     "taskipy>=1.14.1",

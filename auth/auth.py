@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import jsonify, request
 import base64
-from repo.user import get_user_by_email
+from repo.user import user_by_email_repo
 
 
 # used by login
@@ -15,14 +15,19 @@ def claim_user_from_token(token):
     token_user_data = base64.b64decode(token).decode().split(":")
 
     email = token_user_data[0]
-    user = get_user_by_email(email)
+    user = user_by_email_repo(email)
 
-    if user is None:
-        return None
-    
-    user.pop("password")
+    filtered_user = {
+        "id": user.id,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "phone_number": user.phone_number,
+        "address": user.address,
+        "date_of_birth": user.date_of_birth,
+    }
 
-    return user
+    return filtered_user
 
 # used by any function as wrapper
 def login_required(f):

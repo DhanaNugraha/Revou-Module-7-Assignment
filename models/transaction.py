@@ -14,7 +14,7 @@ class TransactionsModel(db.Model):
 
     # relationships
     account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
-    accounts = db.relationship("AccountsModel", back_populates="transactions")
+    # accounts = db.relationship("AccountsModel", back_populates="transactions")
 
 transactions_db = {
     "transactions": {

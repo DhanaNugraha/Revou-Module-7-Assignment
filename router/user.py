@@ -14,7 +14,6 @@ def users_api():
 def current_user():
     match request.method.lower():
         case "get":
-            print("hereee")
             return get_user(request.user)
 
         # update users
