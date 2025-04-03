@@ -10,11 +10,18 @@ class TransactionsModel(db.Model):
     currency = db.Column(db.String(10))
     description = db.Column(db.String(100))
     created_at = db.Column(db.DateTime, default=time.now)
-    status = db.Column(db.String(10))
+    status = db.Column(db.String(10), default="completed")
 
     # relationships
-    account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
-    # accounts = db.relationship("AccountsModel", back_populates="transactions")
+    from_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+    to_account_id = db.Column(db.Integer, db.ForeignKey('accounts.id'))
+
+
+
+
+
+
+
 
 transactions_db = {
     "transactions": {

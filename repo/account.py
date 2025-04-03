@@ -10,7 +10,7 @@ def account_number_checker_repo(account_number):
     exist = db.session.execute(
         db.select(AccountsModel).filter_by(account_number=account_number)
     ).scalar_one_or_none()
-    print(exist)
+
     # true if exist, false otherwise
     return exist is not None
 
@@ -48,34 +48,40 @@ def account_by_account_id_repo(account_id):
         db.select(AccountsModel).filter_by(id=account_id),
         description=f"No user with account id '{account_id}'.",
     )
-    print(account.user_id)
 
     return account
 
 def account_by_user_id_repo(user_id):
     accounts = db.session.execute(db.select(AccountsModel.id).filter_by(user_id=user_id)).scalars()
 
-    print(user_id)
-
     # .all() returns in list form
     return accounts.all()
 
+def modify_account_balance_repo(account_id, new_amount):
+    account = db.one_or_404(
+        db.select(AccountsModel).filter_by(id=account_id),
+        description=f"No user with account id '{account_id}'.",
+    )
+
+    account.balance = new_amount
+    db.session.commit()
 
 
 
 
-def get_all_accounts():
-    return copy.deepcopy(accounts_db["accounts"])
+
+# def get_all_accounts():
+#     return copy.deepcopy(accounts_db["accounts"])
 
 # def get_accounts_by_user_id(user_id):
 #     user = get_all_users()[user_id]
 #     return user["accounts"]
 
-def get_account_by_account_id(account_id):
-    account = get_all_accounts().get(account_id)
-    # make sure account not None
-    assert account, "account does not exist"
-    return account
+# def get_account_by_account_id(account_id):
+#     account = get_all_accounts().get(account_id)
+#     # make sure account not None
+#     assert account, "account does not exist"
+#     return account
 
 # def register_account_repository(account_id, account_data):
 #     accounts_db["accounts"].update({account_id: account_data})

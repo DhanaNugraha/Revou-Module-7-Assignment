@@ -29,8 +29,12 @@ def register_account(account_data_request, user_auth_data):
     
     # make account number
     account_number = str(random.randint(1000000000, 9999999999))
-    while account_number_checker_repo(account_number):
-        account_number = str(random.randint(1000000000, 9999999999))
+    try:
+        while account_number_checker_repo(account_number):
+            account_number = str(random.randint(1000000000, 9999999999))
+
+    except Exception as e:
+        return jsonify({"message": str(e), "success": False}), 400
     
     # insert acc number and user id
     user_id = user_auth_data.get("id")

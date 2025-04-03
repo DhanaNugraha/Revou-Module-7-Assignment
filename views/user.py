@@ -46,7 +46,6 @@ def register_user(user_data_request):
 def get_user(user_auth_data):
     return jsonify({"data": user_auth_data, "success": True}), 200
 
-
 def update_user(user_data_request, user_auth_data):
     # data checker
     try:

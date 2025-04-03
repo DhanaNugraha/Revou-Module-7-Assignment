@@ -17,7 +17,19 @@ class AccountsModel(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     # user = db.relationship('UsersModel', back_populates='accounts')
 
-    transactions = db.relationship('TransactionsModel', backref='account')
+    source_transactions = db.relationship(
+        'TransactionsModel',
+        foreign_keys='TransactionsModel.from_account_id',
+        backref='from_account', 
+        lazy='dynamic'
+    )
+
+    target_transactions = db.relationship(
+        "TransactionsModel",
+        foreign_keys="TransactionsModel.to_account_id",
+        backref="to_account", 
+        lazy="dynamic",
+    )
 
     
 
