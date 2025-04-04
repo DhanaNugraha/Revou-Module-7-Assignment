@@ -1,3 +1,4 @@
+from typing import Optional
 from flask import jsonify
 from repo.user import create_user_repo, user_update_repo
 from pydantic import BaseModel, ValidationError
@@ -10,6 +11,7 @@ class userRequest(BaseModel):
     phone_number: str
     address: str
     date_of_birth: str
+    testing: Optional[str] = None
 
 
 def register_user(user_data_request):

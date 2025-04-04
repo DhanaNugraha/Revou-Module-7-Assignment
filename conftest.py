@@ -1,4 +1,7 @@
+from flask import request
 import pytest
+from auth.auth import claim_user_from_token
+from auth.before_request import register_auth_middleware
 from config.settings import create_app
 from models.account import AccountsModel
 from models.transaction import TransactionsModel
@@ -6,10 +9,10 @@ from models.user import UsersModel
 from instance.database import db as _db
 from shared.time import now_testing, testing_datetime
 
-
 @pytest.fixture
 def test_app():
     app = create_app("config.testing")
+    register_auth_middleware(app)
     with app.app_context():
         _db.create_all()
 
@@ -18,6 +21,7 @@ def test_app():
     with app.app_context():
         _db.session.remove()
         _db.drop_all()
+
 
 @pytest.fixture
 def db(test_app):
@@ -58,10 +62,11 @@ def users_data_inject(test_app):
             user_model = UsersModel(**user)
             users_list.append(user_model)
         print("inserting user data to db")
-        print(type(users_list[0].date_of_birth))
-        print(users_list)
-        print(30*"-")
+        # print(type(users_list[0].date_of_birth))
+        # print(users_list)
+        # print(30*"-")
         _db.session.add_all(users_list)
+        _db.session.flush()
         _db.session.commit()
         print("user data inserted")
         return users_list
@@ -71,7 +76,8 @@ def users_data_inject(test_app):
 @pytest.fixture
 def client(test_app):
     with test_app.test_client() as client:
-        yield client  # This is where the testing happens
+        with test_app.app_context():
+            yield client  # This is where the testing happens
     print("Tearing down the test client")
     # yield test_app.test_client()
 
@@ -85,7 +91,10 @@ def mock_user_data():
         "password": "password123",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": "1990-01-01",
+        "date_of_birth": testing_datetime(str(now_testing())),
+        "created_at": testing_datetime(str(now_testing())),
+        "updated_at": testing_datetime(str(now_testing())),
+        "testing": "true",
     }
 
 @pytest.fixture
@@ -127,7 +136,7 @@ def mock_incorrect_login_data():
 
 @pytest.fixture
 def mock_token_data():
-    return {"Authorization": "am9obi5kb2VAZXhhbXBsZS5jb206dTE="}
+    return {"Authorization": "am9obi5kb2VAZXhhbXBsZS5jb206MQ=="}
 
 @pytest.fixture
 def mock_account_data():

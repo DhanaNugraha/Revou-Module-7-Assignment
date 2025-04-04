@@ -74,3 +74,6 @@ db
 REVOU-milestone-3
 Erk62CsBHInWx52s
 https://ntkmyddmxvzhnsbvcwlk.supabase.co
+
+db testing 
+Ewvx6hgnNbwQm2gi
