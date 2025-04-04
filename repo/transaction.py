@@ -1,5 +1,6 @@
 from instance.database import db
 from models.transaction import TransactionsModel
+from shared.time import now_testing, testing_datetime
 
 def create_transaction_repo(transaction_data):
     new_transaction = TransactionsModel(    
@@ -11,6 +12,10 @@ def create_transaction_repo(transaction_data):
         from_account_id = transaction_data.from_account_id,
         to_account_id = transaction_data.to_account_id
     )
+
+    if transaction_data.testing:
+        new_transaction.created_at = testing_datetime(str(now_testing()))
+
     db.session.add(new_transaction)
     db.session.commit()
 

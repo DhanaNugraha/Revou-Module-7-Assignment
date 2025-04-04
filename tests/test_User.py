@@ -1,14 +1,21 @@
 from models.user import UsersModel
-from views.user import userRequest
 
 # uv run pytest -v -s --cov=.
 # uv run pytest tests/test_user.py -v -s --cov=.
 
-def test_register_user(client, mock_user_data, users_data_inject):
+def test_register_user(client, mock_user_data, users_data_inject, db):
     register_user = client.post("/users", json=mock_user_data)
     # print(register_user.json)
     assert register_user.status_code == 201
     assert register_user.json["success"] is True
+
+    user = db.session.execute(
+        db.select(UsersModel).filter_by(email="john.doe.100@example.com")
+    ).scalar_one()
+    
+    assert user.password == "password123"
+    assert user.id == 3
+    assert user.first_name == "John"
 
 
 def test_register_user_missing_field(client, mock_user_data, users_data_inject):
@@ -33,11 +40,19 @@ def test_get_user(client, mock_token_data, users_data_inject):
     assert response.status_code == 200
     assert response.json["success"] is True
 
-def test_update_user(client, mock_update_user_data, mock_token_data, users_data_inject):
+def test_update_user(client, mock_update_user_data, mock_token_data, users_data_inject, db):
     response = client.put("/users/me", headers=mock_token_data, json=mock_update_user_data)
 
     assert response.status_code == 200
     assert response.json["success"] is True
+
+    user = db.session.execute(
+        db.select(UsersModel).filter_by(email="john.doe@example.com")
+    ).scalar_one()
+    
+    assert user.password == "password1234556"
+    assert user.id == 1
+    assert user.address == "tess"
 
 def test_update_user_missing_field(client, mock_update_user_data, mock_token_data, users_data_inject):
     mock_update_user_data.pop("email")

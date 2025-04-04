@@ -75,33 +75,68 @@ def account_data_inject(test_app):
             "user_id": 1,
             "account_type": "checking",
             "account_number": "1234567890",
-            "balance": 1500.50,
+            "balance": 1000.00,
             "currency": "USD",
             "status": "active",
             "created_at": testing_datetime(str(now_testing())),
-            "updated_at" : testing_datetime(str(now_testing()))
-        }
+            "updated_at": testing_datetime(str(now_testing())),
+        },
+        {
+            "id": 2,
+            "user_id": 1,
+            "account_type": "checking",
+            "account_number": "1234567891",
+            "balance": 2000.50,
+            "currency": "USD",
+            "status": "active",
+            "created_at": testing_datetime(str(now_testing())),
+            "updated_at": testing_datetime(str(now_testing())),
+        },
     ]
     with test_app.app_context():
         accounts_list = []
         for account in account_data:
-            user_model = AccountsModel(**account)
-            accounts_list.append(user_model)
+            account_model = AccountsModel(**account)
+            accounts_list.append(account_model)
         print("inserting account data to db")
         _db.session.add_all(accounts_list)
         _db.session.commit()
         print("account data inserted")
         return accounts_list
-
+    
+@pytest.fixture
+def transaction_data_inject(test_app):
+    transaction_data = [
+        {
+            "id": 1,
+            "from_account_id": 1,
+            "to_account_id": 2,
+            "type": "transfer",
+            "payment_method": "card",
+            "amount": 100.00,
+            "currency": "USD",
+            "description": "Grocery store purchase",
+            "status": "completed",
+            "created_at": testing_datetime(str(now_testing())),
+        }
+    ]
+    with test_app.app_context():
+        transactions_list = []
+        for transaction in transaction_data:
+            transaction_model = TransactionsModel(**transaction)
+            transactions_list.append(transaction_model)
+        print("inserting transaction data to db")
+        _db.session.add_all(transactions_list)
+        _db.session.commit()
+        print("transaction data inserted")
+        return transactions_list
 
 
 @pytest.fixture
 def client(test_app):
     with test_app.test_client() as client:
-        with test_app.app_context():
-            yield client  # This is where the testing happens
+        yield client  
     print("Tearing down the test client")
-    # yield test_app.test_client()
 
 
 @pytest.fixture
@@ -172,19 +207,33 @@ def mock_update_account_data():
     return {"currency": "IDR", "account_type": "savings", "testing": "true"}
 
 @pytest.fixture
-def mock_transaction_data():
+def mock_transfer_data():
     return {
-        "account_id": "a4",
-        "type": "deposit",
+        "from_account_id": 1,
+        "to_account_id": 2,
+        "type": "transfer",
         "payment_method": "card",
-        "amount": 400,
+        "amount": 100.00,
         "currency": "USD",
         "description": "Grocery store purchase",
+        "testing": "true",
+    }
+
+@pytest.fixture
+def mock_deposit_data():
+    return {
+        "from_account_id": 1,
+        "type": "deposit",
+        "payment_method": "card",
+        "amount": 400.00,
+        "currency": "USD",
+        "testing": "true",
     }
 
 @pytest.fixture
 def mock_transaction_id():
-    return "a1t1"
+    return 1
+
 
 # @pytest.fixture
 # def mock_token_data2():

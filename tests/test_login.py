@@ -1,4 +1,4 @@
-from app import app
+
 
 # uv run pytest -v -s --cov=.
 # uv run pytest tests/test_login.py -v -s --cov=.

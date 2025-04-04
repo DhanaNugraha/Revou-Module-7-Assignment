@@ -53,7 +53,7 @@ def account_by_account_id_repo(account_id):
         db.select(AccountsModel).filter_by(id=account_id),
         description=f"No user with account id '{account_id}'.",
     )
-
+    
     return account
 
 def account_by_user_id_repo(user_id):
@@ -62,13 +62,17 @@ def account_by_user_id_repo(user_id):
     # .all() returns in list form
     return accounts.all()
 
-def modify_account_balance_repo(account_id, new_amount):
+def modify_account_balance_repo(account_id, new_amount, transaction_data):
     account = db.one_or_404(
         db.select(AccountsModel).filter_by(id=account_id),
         description=f"No user with account id '{account_id}'.",
     )
 
     account.balance = new_amount
+
+    if transaction_data.testing:
+       account.updated_at = testing_datetime(str(now_testing()))
+
     db.session.commit()
 
 

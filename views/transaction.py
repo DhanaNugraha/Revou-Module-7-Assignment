@@ -16,6 +16,7 @@ class TransactionRequest(BaseModel):
     description: Optional[str] = None
     from_account_id: int
     to_account_id: Optional[int] = None
+    testing: Optional[str] = None
 
 
 def substract_balance(account_id, amount):
@@ -48,9 +49,10 @@ def currency_check(transaction_data_request):
     except Exception as e:
         return jsonify({"message": str(e), "success": False, "location": "currency check repo"}), 409
     
+
     account_currency = account_data.currency.lower() 
 
-    if request_currency != account_currency:
+    if request_currency.lower() != account_currency:
         return jsonify(
             {
                 "message": "Currency does not match to your account's currency",
@@ -119,7 +121,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
         
         # update account balance
         try:
-            modify_account_balance_repo(from_account_id, source_new_balance)
+            modify_account_balance_repo(from_account_id, source_new_balance, transaction_data_validated)
 
         except Exception as e:
             return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
@@ -128,7 +130,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
             target_new_balance = add_balance(to_account_id, amount)
 
             try:
-                modify_account_balance_repo(to_account_id, target_new_balance)
+                modify_account_balance_repo(to_account_id, target_new_balance, transaction_data_validated)
 
             except Exception as e:
                 return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
@@ -142,7 +144,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
         target_new_balance = add_balance(from_account_id, amount)
 
         try:
-            modify_account_balance_repo(from_account_id, target_new_balance)
+            modify_account_balance_repo(from_account_id, target_new_balance, transaction_data_validated)
 
         except Exception as e:
             return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
