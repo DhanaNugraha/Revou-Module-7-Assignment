@@ -92,8 +92,6 @@ def mock_user_data():
         "phone_number": "+1234567890",
         "address": "tess",
         "date_of_birth": testing_datetime(str(now_testing())),
-        "created_at": testing_datetime(str(now_testing())),
-        "updated_at": testing_datetime(str(now_testing())),
         "testing": "true",
     }
 
@@ -106,7 +104,8 @@ def mock_update_user_data():
         "password": "password1234556",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": "1990-01-01",
+        "date_of_birth": testing_datetime(str(now_testing())),
+        "testing": "true",
     }
 
 @pytest.fixture

@@ -41,5 +41,10 @@ def user_update_repo(user_data):
     user.date_of_birth = user_data.date_of_birth
     # updated at ada di model
 
+    if user_data.testing:
+       user.date_of_birth = testing_datetime(str(now_testing()))
+       user.created_at = testing_datetime(str(now_testing()))
+       user.updated_at = testing_datetime(str(now_testing()))
+
     db.session.commit()
 

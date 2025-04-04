@@ -20,7 +20,7 @@ def register_user(user_data_request):
         user_data_validated = userRequest.model_validate(user_data_request)
 
     except ValidationError as e:
-        return jsonify({"message": str(e), "success": False, "fail validation": True}), 400
+        return jsonify({"message": str(e), "success": False}), 400
 
     try:
         create_user_repo(user_data_validated)
