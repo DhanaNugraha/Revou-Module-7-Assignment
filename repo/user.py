@@ -3,7 +3,6 @@ from models.user import UsersModel
 from shared.time import now_testing, testing_datetime
 
 def create_user_repo(user_data):
-    print(user_data, "-"*30)
     new_user = UsersModel(
         first_name = user_data.first_name,
         last_name = user_data.last_name,
@@ -39,7 +38,6 @@ def user_update_repo(user_data):
     user.phone_number = user_data.phone_number
     user.address = user_data.address
     user.date_of_birth = user_data.date_of_birth
-    # updated at ada di model
 
     if user_data.testing:
        user.date_of_birth = testing_datetime(str(now_testing()))

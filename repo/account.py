@@ -11,8 +11,6 @@ def account_number_checker_repo(account_number):
     return exist is not None
 
 def create_account_repo(account_data, user_id, account_number):
-    # print(user_id)
-    # print(type(user_id))
     new_account = AccountsModel(
         account_type = account_data.account_type,
         account_number = account_number,
@@ -53,7 +51,7 @@ def account_by_account_id_repo(account_id):
         db.select(AccountsModel).filter_by(id=account_id),
         description=f"No user with account id '{account_id}'.",
     )
-    
+
     return account
 
 def account_by_user_id_repo(user_id):

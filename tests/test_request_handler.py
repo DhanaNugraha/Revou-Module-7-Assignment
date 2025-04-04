@@ -3,7 +3,6 @@
 
 def test_before_request_handler(client, mock_token_data, users_data_inject):
     response = client.get("/users/me", headers=mock_token_data)
-    print(response.json)
 
     assert response.status_code == 200
 
