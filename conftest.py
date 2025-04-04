@@ -1,15 +1,72 @@
 import pytest
 from config.settings import create_app
+from models.account import AccountsModel
+from models.transaction import TransactionsModel
+from models.user import UsersModel
+from instance.database import db as _db
+from shared.time import now_testing, testing_datetime
 
 
 @pytest.fixture
 def test_app():
     app = create_app("config.testing")
+    with app.app_context():
+        _db.create_all()
 
-    # app.config.update({
-    #     "TESTING": True
-    # })
     yield app
+
+    with app.app_context():
+        _db.session.remove()
+        _db.drop_all()
+
+@pytest.fixture
+def db(test_app):
+    with test_app.app_context():
+        yield _db
+
+@pytest.fixture
+def users_data_inject(test_app):
+    users_data = [
+        {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@example.com",
+            "password": "password123",
+            "phone_number": "+1234567890",
+            "address": "123 Main St New York NY 10001 USA",
+            "date_of_birth": testing_datetime(str(now_testing())),
+            "created_at": testing_datetime(str(now_testing())),
+            "updated_at": testing_datetime(str(now_testing())),
+        },
+        {
+            "id": 2,
+            "first_name": "Jane",
+            "last_name": "Smith",
+            "email": "jane.smith@example.com",
+            "password": "password1234",
+            "phone_number": "+0987654321",
+            "address": "456 Elm St Los Angeles CA 90001 USA",
+            "date_of_birth": testing_datetime(str(now_testing())),
+            "created_at": testing_datetime(str(now_testing())),
+            "updated_at": testing_datetime(str(now_testing())),
+        },
+    ]
+    with test_app.app_context():
+        users_list = []
+        for user in users_data:
+            user_model = UsersModel(**user)
+            users_list.append(user_model)
+        print("inserting user data to db")
+        print(type(users_list[0].date_of_birth))
+        print(users_list)
+        print(30*"-")
+        _db.session.add_all(users_list)
+        _db.session.commit()
+        print("user data inserted")
+        return users_list
+
+
 
 @pytest.fixture
 def client(test_app):

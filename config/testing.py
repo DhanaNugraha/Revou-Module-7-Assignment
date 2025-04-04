@@ -1,3 +1,4 @@
 TESTING = True
 
-SQLALCHEMY_DATABASE_URI = "postgresql:///test.db"
+# has to be sqlite
+SQLALCHEMY_DATABASE_URI = "sqlite:///test.db"

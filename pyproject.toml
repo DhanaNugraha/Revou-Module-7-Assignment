@@ -16,4 +16,4 @@ dependencies = [
 ]
 
 [tool.taskipy.tasks]
-fr = "flask --app app run --port 3008 --debug --reload"
+fr = "flask --app app run --port 3005 --debug --reload"
