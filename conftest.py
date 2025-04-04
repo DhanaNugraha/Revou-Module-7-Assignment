@@ -1,6 +1,4 @@
-from flask import request
 import pytest
-from auth.auth import claim_user_from_token
 from auth.before_request import register_auth_middleware
 from config.settings import create_app
 from models.account import AccountsModel
