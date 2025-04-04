@@ -1,5 +1,6 @@
 from instance.database import db
 from models.account import AccountsModel
+from shared.time import now_testing, testing_datetime
 
 def account_number_checker_repo(account_number):
     exist = db.session.execute(
@@ -18,6 +19,11 @@ def create_account_repo(account_data, user_id, account_number):
         currency = account_data.currency,
         user_id = user_id
     )
+
+    if account_data.testing:
+       new_account.created_at = testing_datetime(str(now_testing()))
+       new_account.updated_at = testing_datetime(str(now_testing()))
+
     db.session.add(new_account)
     db.session.commit()
 
@@ -26,6 +32,10 @@ def update_account_repo(account_data, account_id):
 
     account.account_type = account_data.account_type
     account.currency = account_data.currency
+
+    if account_data.testing:
+       account.created_at = testing_datetime(str(now_testing()))
+       account.updated_at = testing_datetime(str(now_testing()))
 
     db.session.commit()
     return account.account_number

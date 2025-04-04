@@ -20,15 +20,15 @@ def register_user(user_data_request):
         user_data_validated = userRequest.model_validate(user_data_request)
 
     except ValidationError as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "user data validation"}), 400
 
     try:
         create_user_repo(user_data_validated)
 
     except Exception as e:  
         return jsonify(
-            {"message": str(e), "success": False, "fail at repo": True}
-        ), 400
+            {"message": str(e), "success": False, "location": "create user repo"},
+        ), 409
 
     return jsonify(
         {
@@ -49,7 +49,9 @@ def update_user(user_data_request, user_auth_data):
         user_data_validated =userRequest.model_validate(user_data_request)
 
     except ValidationError as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify(
+            {"message": str(e), "success": False, "location": "user data validation"}
+        ), 400
 
     if user_auth_data.get("email") != user_data_validated.email:
         return jsonify(
@@ -63,7 +65,9 @@ def update_user(user_data_request, user_auth_data):
         user_update_repo(user_data_validated)
 
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify(
+            {"message": str(e), "success": False, "location": "update user repo"}
+        ), 409
 
     return jsonify(
         {

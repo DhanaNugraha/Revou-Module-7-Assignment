@@ -62,14 +62,36 @@ def users_data_inject(test_app):
             user_model = UsersModel(**user)
             users_list.append(user_model)
         print("inserting user data to db")
-        # print(type(users_list[0].date_of_birth))
-        # print(users_list)
-        # print(30*"-")
         _db.session.add_all(users_list)
-        _db.session.flush()
         _db.session.commit()
         print("user data inserted")
         return users_list
+    
+@pytest.fixture
+def account_data_inject(test_app):
+    account_data = [
+        {
+            "id": 1,
+            "user_id": 1,
+            "account_type": "checking",
+            "account_number": "1234567890",
+            "balance": 1500.50,
+            "currency": "USD",
+            "status": "active",
+            "created_at": testing_datetime(str(now_testing())),
+            "updated_at" : testing_datetime(str(now_testing()))
+        }
+    ]
+    with test_app.app_context():
+        accounts_list = []
+        for account in account_data:
+            user_model = AccountsModel(**account)
+            accounts_list.append(user_model)
+        print("inserting account data to db")
+        _db.session.add_all(accounts_list)
+        _db.session.commit()
+        print("account data inserted")
+        return accounts_list
 
 
 
@@ -139,15 +161,15 @@ def mock_token_data():
 
 @pytest.fixture
 def mock_account_data():
-    return {"currency": "USD", "account_type": "savings"}
+    return {"currency": "USD", "account_type": "savings", "testing": "true"}
 
 @pytest.fixture
 def mock_account_id():
-    return "a1"
+    return 1
 
 @pytest.fixture
 def mock_update_account_data():
-    return {"currency": "IDR", "account_type": "savings"}
+    return {"currency": "IDR", "account_type": "savings", "testing": "true"}
 
 @pytest.fixture
 def mock_transaction_data():

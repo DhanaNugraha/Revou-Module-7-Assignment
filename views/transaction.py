@@ -23,7 +23,7 @@ def substract_balance(account_id, amount):
         account = account_by_account_id_repo(account_id)
 
     except Exception as e:  
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "substract balance repo"}), 409
 
     if account.balance < amount:
         return False
@@ -35,7 +35,7 @@ def add_balance(account_id, amount):
         account = account_by_account_id_repo(account_id)
 
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "add balance repo"}), 409
 
     return account.balance + amount
 
@@ -46,7 +46,7 @@ def currency_check(transaction_data_request):
         account_data = account_by_account_id_repo(transaction_data_request.from_account_id)
 
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "currency check repo"}), 409
     
     account_currency = account_data.currency.lower() 
 
@@ -83,7 +83,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
         transaction_data_validated = TransactionRequest.model_validate(transaction_data_request)
 
     except ValidationError as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "transaction data validation"}), 400
 
     transaction_type = transaction_data_validated.type
     from_account_id = transaction_data_validated.from_account_id
@@ -122,7 +122,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
             modify_account_balance_repo(from_account_id, source_new_balance)
 
         except Exception as e:
-            return jsonify({"message": str(e), "success": False}), 400
+            return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
         
         if to_account_id:
             target_new_balance = add_balance(to_account_id, amount)
@@ -131,7 +131,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
                 modify_account_balance_repo(to_account_id, target_new_balance)
 
             except Exception as e:
-                return jsonify({"message": str(e), "success": False}), 400
+                return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
 
         # register transaction
         create_transaction_repo(transaction_data_validated)
@@ -145,7 +145,7 @@ def initiate_transaction(transaction_data_request, user_auth_data):
             modify_account_balance_repo(from_account_id, target_new_balance)
 
         except Exception as e:
-            return jsonify({"message": str(e), "success": False}), 400
+            return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
         
         # register transaction
         create_transaction_repo(transaction_data_validated)
@@ -177,7 +177,7 @@ def get_user_account_transactions(user_auth_data):
         user_accounts = account_by_user_id_repo(user_id)
 
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "get user accounts repo"}), 400
 
     transactions = []
 
@@ -186,7 +186,7 @@ def get_user_account_transactions(user_auth_data):
             account_transactions = account_transactions_repo(from_account_id)
 
         except Exception as e:
-            return jsonify({"message": str(e), "success": False}), 400
+            return jsonify({"message": str(e), "success": False, "location": "get account transactions repo"}), 409
 
         transactions.extend(account_transactions)
 
@@ -197,7 +197,7 @@ def get_transaction_details(transaction_id):
         transaction_data = transaction_by_id_repo(transaction_id)
 
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "get transaction details repo"}), 409
     
     format_transaction_data = {
         "id": transaction_data.id,

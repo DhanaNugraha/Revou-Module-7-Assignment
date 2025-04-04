@@ -9,7 +9,7 @@ def login(login_request_data):
     try:
         user_data = user_by_email_repo(email)
     except Exception as e:
-        return jsonify({"message": str(e), "success": False}), 400
+        return jsonify({"message": str(e), "success": False, "location": "login repo access"}), 400
 
     assert user_data.password == password, "Incorrect password"
 

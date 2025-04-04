@@ -4,6 +4,12 @@ from router.transaction import transactions_api, transactions_by_id
 
 # uv run pytest -v -s --cov=.
 
+#  make insert fixture for transaction
+# fix repo for testing
+# add testing input for mocks
+# add testing input in view request model
+
+
 
 
 

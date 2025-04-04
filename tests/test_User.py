@@ -1,9 +1,4 @@
-# from flask import request, g
-# import flask
-# from app import app
-# from views.user import get_user, update_user
-# from router.user import users_api, current_user
-
+from models.user import UsersModel
 from views.user import userRequest
 
 # uv run pytest -v -s --cov=.
@@ -15,20 +10,22 @@ def test_register_user(client, mock_user_data, users_data_inject):
     assert register_user.status_code == 201
     assert register_user.json["success"] is True
 
+
 def test_register_user_missing_field(client, mock_user_data, users_data_inject):
     mock_user_data.pop("email")
     register_user = client.post("/users", json=mock_user_data)
     # print(register_user.json)
     assert register_user.status_code == 400
     assert register_user.json["success"] is False
+    assert register_user.json["location"] == "user data validation"
 
 def test_register_repo_error(client, mock_user_data, users_data_inject):
     mock_user_data.pop("testing")
     register_user = client.post("/users", json=mock_user_data)
     # print(register_user.json)
-    assert register_user.status_code == 400
+    assert register_user.status_code == 409
     assert register_user.json["success"] is False
-
+    assert register_user.json["location"] == "create user repo"
 
 def test_get_user(client, mock_token_data, users_data_inject):
     response = client.get("/users/me", headers=mock_token_data)
@@ -51,6 +48,21 @@ def test_update_user_missing_field(client, mock_update_user_data, mock_token_dat
     assert response.status_code == 400
     assert response.json["success"] is False
 
+def test_update_user_wrong_email(
+    client, mock_update_user_data, mock_token_data, users_data_inject
+):
+    mock_update_user_data["email"] = "wrong@example.com"
+    response = client.put(
+        "/users/me", headers=mock_token_data, json=mock_update_user_data
+    )
+
+    assert response.status_code == 400
+    assert response.json["success"] is False
+    assert (
+        response.json["message"]
+        == "You are not authorized to update this user. Make sure you input your registered email."
+    )
+
 def test_update_user_repo_error(
     client, mock_update_user_data, mock_token_data, users_data_inject
 ):
@@ -59,8 +71,13 @@ def test_update_user_repo_error(
         "/users/me", headers=mock_token_data, json=mock_update_user_data
     )
 
-    assert response.status_code == 400
+    assert response.status_code == 409
     assert response.json["success"] is False
+    assert response.json["location"] == "update user repo"
+
+
+
+
 
 # def test_get_user(client, mock_auth_user_data, mock_token_data, users_data_inject, ):
 #     with client.application.test_request_context(
