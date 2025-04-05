@@ -51,7 +51,7 @@ This API provides a comprehensive set of endpoints for managing users, accounts,
 
 ## API Usage Documentation
 
-The full documentation of each endpoints, along with their request requirements and expected  response are shown in [API Documentation](https://z03lzbuu5z.apidog.io/get-account-details-14807137e0)
+The full documentation of each endpoints, along with their request requirements and expected  response are shown in [API Documentation](https://vmh9e49dyw.apidog.io)
 
 ### Base URL
 `http://127.0.0.1:3005`
@@ -62,7 +62,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ---
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -70,10 +69,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For questions or support, please contact [dhananugraha1511@gmail.com](mailto:dhananugraha1511@gmail.com).
 
 
-db
-REVOU-milestone-3
-Erk62CsBHInWx52s
-https://ntkmyddmxvzhnsbvcwlk.supabase.co
-
-db testing 
-Ewvx6hgnNbwQm2gi
