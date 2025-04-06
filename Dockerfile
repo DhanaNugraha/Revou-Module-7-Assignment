@@ -13,4 +13,6 @@ COPY . .
 # Install dependencies
 RUN uv sync
 
+EXPOSE 3005  # Add this line with your app's port
+
 CMD ["uv", "run", "task", "fr"]
