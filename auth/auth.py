@@ -1,21 +1,12 @@
 from functools import wraps
 from flask import jsonify, request
-import base64
-from repo.user import user_by_email_repo
-
-
-# used by login
-def get_token(email, id):
-    token = base64.b64encode(f"{email}:{id}".encode()).decode()
-    return token
+from repo.user import user_by_id_repo
 
 # used by middleware
 # return user data except password
-def claim_user_from_token(token):
-    token_user_data = base64.b64decode(token).decode().split(":")
+def claim_user_from_token(user_id_from_token):
 
-    email = token_user_data[0]
-    user = user_by_email_repo(email)
+    user = user_by_id_repo(user_id_from_token)
 
     filtered_user = {
         "id": user.id,
@@ -38,7 +29,7 @@ def login_required(f):
         user = getattr(request, "user", None)
 
         if user is None:
-            return jsonify({"message": "Unauthorized", "success": False}), 401
+            return jsonify({"message": "Unauthorized", "success": False, "location": "login_required auth"}), 401
         
         return f(*args, **kwargs)
 

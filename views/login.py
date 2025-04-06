@@ -1,6 +1,5 @@
 from flask import jsonify
-from auth.auth import get_token
-from models.user import UsersModel
+from flask_jwt_extended import create_access_token
 from repo.user import user_by_email_repo
 
 def login(login_request_data):
@@ -11,12 +10,11 @@ def login(login_request_data):
         user_data = user_by_email_repo(email)
     except Exception as e:
         return jsonify({"message": str(e), "success": False, "location": "login repo access"}), 400
-    
-    # user = UsersModel.query.filter(UsersModel.email == email).first()
-    
+ 
     if user_data:
         if user_data.authenticate_password(password):
-            token = get_token(email, user_data.id)   
+
+            token = create_access_token(identity=str(user_data.id))
 
             return jsonify({"data": {"token": token}, "success": True}), 200
         

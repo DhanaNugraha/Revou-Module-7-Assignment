@@ -1,5 +1,5 @@
 import pytest
-from auth.before_request import register_auth_middleware
+from middleware.before_request import auth_middleware
 from config.settings import create_app
 from models.account import AccountsModel
 from models.transaction import TransactionsModel
@@ -10,7 +10,7 @@ from shared.time import now_testing, testing_datetime
 @pytest.fixture
 def test_app():
     app = create_app("config.testing")
-    register_auth_middleware(app)
+    auth_middleware(app)
     with app.app_context():
         _db.create_all()
 
@@ -190,7 +190,9 @@ def mock_incorrect_login_data():
 
 @pytest.fixture
 def mock_token_data():
-    return {"Authorization": "am9obi5kb2VAZXhhbXBsZS5jb206MQ=="}
+    return {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0MzkyODY3NywianRpIjoiZjUwYzllNGMtNmFjMi00ZjMzLTlhZGYtMjg4YjQ5YmRlYmRjIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NDM5Mjg2NzcsImNzcmYiOiJmNTBkMDUwYi0wZTU2LTRhNTktYWY3OS1iZjA2M2QyOWRjNmMifQ.HYJUuhTStjw94k_UsiVQML7SF9byxh_f_RNAisiM3Kw"
+    }
 
 @pytest.fixture
 def mock_account_data():
@@ -233,7 +235,4 @@ def mock_transaction_id():
     return 1
 
 
-# @pytest.fixture
-# def mock_token_data2():
-#     return {"Authorization": "am9obi5kb2UuMTAwQGV4YW1wbGUuY29tOnUz"}
 

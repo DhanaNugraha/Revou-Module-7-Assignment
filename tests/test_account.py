@@ -1,10 +1,19 @@
 from models.account import AccountsModel
+from models.user import UsersModel
 
 # uv run pytest -v -s --cov=.
 # uv run pytest tests/test_account.py -v -s --cov=.
 
 def test_register_account(client, mock_token_data, mock_account_data, users_data_inject, db):
+    user = db.session.execute(
+        db.select(UsersModel).filter_by(id=1)
+    ).scalar_one()
+    print(user)
+
+
     response = client.post("/accounts",headers=mock_token_data, json=mock_account_data)
+
+    print(response.json)
 
     assert response.status_code == 200
     assert response.json["success"] is True

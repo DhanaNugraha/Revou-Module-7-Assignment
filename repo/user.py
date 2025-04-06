@@ -24,13 +24,6 @@ def create_user_repo(user_data):
     db.session.add(new_user)
     db.session.commit()
 
-def user_by_email_repo(email):
-    user = db.one_or_404(
-        db.select(UsersModel).filter_by(email=email),
-        description=f"No user with email '{email}'.",
-    )
-    return user
-
 def user_update_repo(user_data):
 
     user = user_by_email_repo(user_data.email)
@@ -49,4 +42,18 @@ def user_update_repo(user_data):
        user.updated_at = testing_datetime(str(now_testing()))
 
     db.session.commit()
+
+def user_by_email_repo(email):
+    user = db.one_or_404(
+        db.select(UsersModel).filter_by(email=email),
+        description=f"No user with email '{email}'.",
+    )
+    return user
+
+def user_by_id_repo(user_id):
+    user = db.one_or_404(
+        db.select(UsersModel).filter_by(id=user_id),
+        description=f"No user with id '{user_id}'.",
+    )
+    return user
 

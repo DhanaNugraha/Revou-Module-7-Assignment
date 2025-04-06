@@ -33,5 +33,5 @@ class UsersModel(db.Model):
         return bcrypt.check_password_hash(self._password_hash, password.encode("utf-8"))
 
     def __repr__(self):
-        return f"id = {self.id} | first_name = {self.first_name} | last_name = {self.last_name} | email = {self.email} |  password = {self.password} | phone_number = {self.phone_number} | address = {self.address} | date_of_birth = {self.date_of_birth} | created_at = {self.created_at} | updated_at = {self.updated_at}"
+        return f"id = {self.id} | first_name = {self.first_name} | last_name = {self.last_name} | email = {self.email} |  _password_hash = {self._password_hash} | phone_number = {self.phone_number} | address = {self.address} | date_of_birth = {self.date_of_birth} | created_at = {self.created_at} | updated_at = {self.updated_at}"
 
