@@ -6,10 +6,12 @@ from models.transaction import TransactionsModel
 from models.user import UsersModel
 from instance.database import db as _db
 from shared.time import now_testing, testing_datetime
+import os
 
 @pytest.fixture
 def test_app():
-    app = create_app("config.testing")
+    config_module = os.environ["FLASK_CONFIG"] = "config.testing"
+    app = create_app(config_module)
     auth_middleware(app)
     with app.app_context():
         _db.create_all()
