@@ -1,7 +1,7 @@
 # RevoBank Application API
 
 ## Overview
-This API provides a comprehensive set of endpoints for managing users, accounts, and transactions in a banking application. Built using **uv** python package and project manager as well as **Flask** for the virtual environment. It supports user authentication, account management, and transaction processing.
+This API provides a comprehensive set of endpoints for managing users, accounts, and transactions in a banking application. Built using **uv** python package and project manager as well as **Flask** for the virtual environment. In addition, this API is Deployed on **Koyeb** for reliable cloud hosting. It supports user authentication, account management, and transaction processing. 
 
 ## Features Implemented
 1. **User Management**:
@@ -54,7 +54,8 @@ This API provides a comprehensive set of endpoints for managing users, accounts,
 The full documentation of each endpoints, along with their request requirements and expected  response are shown in [API Documentation](https://vmh9e49dyw.apidog.io)
 
 ### Base URL
-`http://127.0.0.1:3005`
+This API is deployed using **Koyeb**  with the following base url for the API request.
+`mad-adriane-dhanapersonal-9be85724.koyeb.app/`
 
 
 ## Contributing
