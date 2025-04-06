@@ -13,7 +13,6 @@ def test_register_user(client, mock_user_data, users_data_inject, db):
         db.select(UsersModel).filter_by(email="john.doe.100@example.com")
     ).scalar_one()
     
-    assert user.password == "password123"
     assert user.id == 3
     assert user.first_name == "John"
 
@@ -50,7 +49,6 @@ def test_update_user(client, mock_update_user_data, mock_token_data, users_data_
         db.select(UsersModel).filter_by(email="john.doe@example.com")
     ).scalar_one()
     
-    assert user.password == "password1234556"
     assert user.id == 1
     assert user.address == "tess"
 

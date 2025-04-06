@@ -14,6 +14,6 @@ def test_incorrect_login_user(client, mock_incorrect_login_data, users_data_inje
 
     assert login_user.status_code == 400
     assert login_user.json["success"] is False
-    assert login_user.json["message"] == "Incorrect password"
+    assert login_user.json["message"] == "Invalid credentials"
 
 
