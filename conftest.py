@@ -42,6 +42,7 @@ def users_data_inject(test_app):
             "date_of_birth": testing_datetime(str(now_testing())),
             "created_at": testing_datetime(str(now_testing())),
             "updated_at": testing_datetime(str(now_testing())),
+            "role": "user",
         },
         {
             "id": 2,
@@ -54,6 +55,7 @@ def users_data_inject(test_app):
             "date_of_birth": testing_datetime(str(now_testing())),
             "created_at": testing_datetime(str(now_testing())),
             "updated_at": testing_datetime(str(now_testing())),
+            "role": "user",
         },
     ]
     with test_app.app_context():
@@ -153,6 +155,21 @@ def mock_user_data():
     }
 
 @pytest.fixture
+def mock_auth_user_data():
+    return {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "phone_number": "+1234567890",
+        "address": "123 Main St New York NY 10001 USA",
+        "date_of_birth": testing_datetime(str(now_testing())),
+        "created_at": testing_datetime(str(now_testing())),
+        "updated_at": testing_datetime(str(now_testing())),
+        "role": "user",
+    }
+
+@pytest.fixture
 def mock_update_user_data():
     return {
         "first_name": "John",
@@ -235,6 +252,8 @@ def mock_deposit_data():
 @pytest.fixture
 def mock_transaction_id():
     return 1
+
+
 
 
 

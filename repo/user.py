@@ -2,7 +2,7 @@ from instance.database import db
 from models.user import UsersModel
 from shared.time import now_testing, testing_datetime
 
-def create_user_repo(user_data):
+def create_user_repo(user_data, admin_token=None):
     new_user = UsersModel(
         first_name = user_data.first_name,
         last_name = user_data.last_name,
@@ -14,17 +14,19 @@ def create_user_repo(user_data):
 
     new_user.password_hash = user_data.password
 
-
+    if admin_token:
+        new_user.role = "admin"
 
     if user_data.testing:
        new_user.date_of_birth = testing_datetime(str(now_testing()))
        new_user.created_at = testing_datetime(str(now_testing()))
        new_user.updated_at = testing_datetime(str(now_testing()))
+       
 
     db.session.add(new_user)
     db.session.commit()
 
-def user_update_repo(user_data):
+def user_update_repo(user_data, admin_token=None):
 
     user = user_by_email_repo(user_data.email)
 
@@ -35,6 +37,9 @@ def user_update_repo(user_data):
     user.date_of_birth = user_data.date_of_birth
 
     user.password_hash = user_data.password
+
+    if admin_token:
+        user.role = "admin"
 
     if user_data.testing:
        user.date_of_birth = testing_datetime(str(now_testing()))

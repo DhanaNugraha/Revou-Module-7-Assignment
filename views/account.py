@@ -53,7 +53,7 @@ def update_account_details(account_id, account_data_request):
 
     return jsonify({"message": f"account {account_number} updated successfully", "success": True}), 200
 
-def delete_account(account_id, user_auth_data):
+def delete_account(account_id):
     try:
         delete_account_repo(account_id)
 

@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 from flask import jsonify
 from repo.user import create_user_repo, user_update_repo
@@ -12,6 +13,7 @@ class userRequest(BaseModel):
     address: str
     date_of_birth: str
     testing: Optional[str] = None
+    admin_token: Optional[str] = None
 
 
 def register_user(user_data_request):
@@ -21,14 +23,29 @@ def register_user(user_data_request):
 
     except ValidationError as e:
         return jsonify({"message": str(e), "success": False, "location": "user data validation"}), 400
+    
+    if user_data_validated.admin_token:
+        admin_token = os.getenv("ADMIN_TOKEN")
 
-    try:
-        create_user_repo(user_data_validated)
+        if admin_token == user_data_validated.admin_token:
+            try:
+                create_user_repo(user_data_validated, admin_token)
 
-    except Exception as e:  
-        return jsonify(
-            {"message": str(e), "success": False, "location": "create user repo"},
-        ), 409
+            except Exception as e:  
+                return jsonify(
+                    {"message": str(e), "success": False, "location": "create admin repo"},
+                ), 409
+        else:
+            return jsonify({"message": "Unauthorized", "success": False, "location": "register admin"}), 401
+
+    else:
+        try:
+            create_user_repo(user_data_validated)
+
+        except Exception as e:  
+            return jsonify(
+                {"message": str(e), "success": False, "location": "create user repo"},
+            ), 409
 
     return jsonify(
         {
@@ -41,6 +58,7 @@ def register_user(user_data_request):
 
     
 def get_user(user_auth_data):
+    user_auth_data.pop("role")
     return jsonify({"data": user_auth_data, "success": True}), 200
 
 def update_user(user_data_request, user_auth_data):
@@ -61,17 +79,33 @@ def update_user(user_data_request, user_auth_data):
             }
         ), 400
     
-    try:
-        user_update_repo(user_data_validated)
+    if user_data_validated.admin_token:
+        admin_token = os.getenv("ADMIN_TOKEN")
+        print(admin_token)
 
-    except Exception as e:
-        return jsonify(
-            {"message": str(e), "success": False, "location": "update user repo"}
-        ), 409
+        if admin_token == user_data_validated.admin_token:
+            try:
+                user_update_repo(user_data_validated, admin_token)
+
+            except Exception as e:  
+                return jsonify(
+                    {"message": str(e), "success": False, "location": "update admin repo"},
+                ), 409
+        else:
+            return jsonify({"message": "Unauthorized", "success": False, "location": "update user admin"}), 401
+    
+    else:
+        try:
+            user_update_repo(user_data_validated)
+
+        except Exception as e:
+            return jsonify(
+                {"message": str(e), "success": False, "location": "update user repo"}
+            ), 409
 
     return jsonify(
         {
-            "message": f"user {user_data_validated.email} updated successfully",
+            "message": f"{user_data_validated.email} updated successfully",
             "success": True,
         }
     ), 200
