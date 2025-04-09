@@ -49,13 +49,13 @@ def users_data_inject(test_app):
             "first_name": "Jane",
             "last_name": "Smith",
             "email": "jane.smith@example.com",
-            "_password_hash": "password1234",
+            "_password_hash": "$2b$12$FCOwMdBOK8A6bon2tuDN.e/ZC1D9AMCORv/HrR/pjxsWA8/szTYCW",
             "phone_number": "+0987654321",
             "address": "456 Elm St Los Angeles CA 90001 USA",
             "date_of_birth": testing_datetime(str(now_testing())),
             "created_at": testing_datetime(str(now_testing())),
             "updated_at": testing_datetime(str(now_testing())),
-            "role": "user",
+            "role": "admin",
         },
     ]
     with test_app.app_context():
@@ -89,6 +89,17 @@ def account_data_inject(test_app):
             "account_type": "checking",
             "account_number": "1234567891",
             "balance": 2000.50,
+            "currency": "USD",
+            "status": "active",
+            "created_at": testing_datetime(str(now_testing())),
+            "updated_at": testing_datetime(str(now_testing())),
+        },
+        {
+            "id": 3,
+            "user_id": 2,
+            "account_type": "checking",
+            "account_number": "1234567892",
+            "balance": 2100.50,
             "currency": "USD",
             "status": "active",
             "created_at": testing_datetime(str(now_testing())),
@@ -142,6 +153,20 @@ def client(test_app):
 
 
 @pytest.fixture
+def mock_admin_data():
+    return {
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe.100@example.com",
+        "password": "password123",
+        "phone_number": "+1234567890",
+        "address": "tess",
+        "date_of_birth": testing_datetime(str(now_testing())),
+        "testing": "true",
+        "admin_token": "admin-token-testing",
+    }
+
+@pytest.fixture
 def mock_user_data():
     return {
         "first_name": "John",
@@ -183,21 +208,33 @@ def mock_update_user_data():
     }
 
 @pytest.fixture
-def mock_auth_user_data():
+def mock_update_user_to_admin_data():
     return {
         "first_name": "John",
         "last_name": "Doe",
         "email": "john.doe@example.com",
+        "password": "password1234556",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": "1990-01-01",
+        "date_of_birth": testing_datetime(str(now_testing())),
+        "testing": "true",
+        "admin_token": "admin-token-testing",
     }
+
 
 @pytest.fixture
 def mock_login_data():
     return {
         "email": "john.doe@example.com",
         "password": "password123",
+    }
+
+@pytest.fixture
+def mock_admin_login_data():
+    return {
+        "email": "jane.smith@example.com",
+        "password": "password123",
+        "admin_token": "admin-token-testing",
     }
 
 @pytest.fixture
@@ -214,12 +251,22 @@ def mock_token_data():
     }
 
 @pytest.fixture
+def mock_admin_token_data():
+    return {
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0NDIxNTU4MywianRpIjoiYzkzODQ1NGMtNjM3NS00NDY5LWE3NTgtYTJkZThkM2JkOGE1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIiLCJuYmYiOjE3NDQyMTU1ODMsImNzcmYiOiI4OTcwYTJhZC0zNzRlLTQyYWEtYTg1OS00Zjc3NWVkYzM5MzIifQ.hl9vNYiQSzqMyU-txUc1kc7-s2h6WIeV3aiZn0Lhp_c"
+    }
+
+@pytest.fixture
 def mock_account_data():
     return {"currency": "USD", "account_type": "savings", "testing": "true"}
 
 @pytest.fixture
 def mock_account_id():
     return 1
+
+@pytest.fixture
+def mock_admin_account_id():
+    return 3
 
 @pytest.fixture
 def mock_update_account_data():
