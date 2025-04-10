@@ -15,10 +15,12 @@ def test_app():
     auth_middleware(app)
     with app.app_context():
         _db.create_all()
+        _db.session.rollback()
 
     yield app
 
     with app.app_context():
+        _db.session.rollback()
         _db.session.remove()
         _db.drop_all()
 
@@ -63,10 +65,14 @@ def users_data_inject(test_app):
         for user in users_data:
             user_model = UsersModel(**user)
             users_list.append(user_model)
-        print("inserting user data to db")
+
+        # print("inserting user data to db")
+
         _db.session.add_all(users_list)
         _db.session.commit()
-        print("user data inserted")
+
+        # print("user data inserted")
+
         return users_list
     
 @pytest.fixture
@@ -111,10 +117,14 @@ def account_data_inject(test_app):
         for account in account_data:
             account_model = AccountsModel(**account)
             accounts_list.append(account_model)
-        print("inserting account data to db")
+
+        # print("inserting account data to db")
+
         _db.session.add_all(accounts_list)
         _db.session.commit()
-        print("account data inserted")
+
+        # print("account data inserted")
+
         return accounts_list
     
 @pytest.fixture
@@ -138,10 +148,14 @@ def transaction_data_inject(test_app):
         for transaction in transaction_data:
             transaction_model = TransactionsModel(**transaction)
             transactions_list.append(transaction_model)
-        print("inserting transaction data to db")
+
+        # print("inserting transaction data to db")
+
         _db.session.add_all(transactions_list)
         _db.session.commit()
-        print("transaction data inserted")
+
+        # print("transaction data inserted")
+        
         return transactions_list
 
 
@@ -149,7 +163,7 @@ def transaction_data_inject(test_app):
 def client(test_app):
     with test_app.test_client() as client:
         yield client  
-    print("Tearing down the test client")
+    # print("Tearing down the test client")
 
 
 @pytest.fixture
@@ -290,6 +304,17 @@ def mock_deposit_data():
     return {
         "from_account_id": 1,
         "type": "deposit",
+        "payment_method": "card",
+        "amount": 400.00,
+        "currency": "USD",
+        "testing": "true",
+    }
+
+@pytest.fixture
+def mock_withdraw_data():
+    return {
+        "from_account_id": 1,
+        "type": "withdraw",
         "payment_method": "card",
         "amount": 400.00,
         "currency": "USD",

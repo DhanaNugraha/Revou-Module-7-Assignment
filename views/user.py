@@ -81,7 +81,7 @@ def update_user(user_data_request, user_auth_data):
     
     if user_data_validated.admin_token:
         admin_token = os.getenv("ADMIN_TOKEN")
-        print(admin_token)
+        # print(admin_token)
 
         if admin_token == user_data_validated.admin_token:
             try:

@@ -7,6 +7,8 @@ from repo.transaction import (
     transaction_by_id_repo,
 )
 from pydantic import BaseModel, ValidationError
+from sqlalchemy.exc import SQLAlchemyError
+from instance.database import db
 
 class TransactionRequest(BaseModel):
     type: str
@@ -19,26 +21,23 @@ class TransactionRequest(BaseModel):
     testing: Optional[str] = None
 
 
-def substract_balance(account_id, amount):
+def substract_balance_calculator(account_id, amount):
     try:
         account = account_by_account_id_repo(account_id)
 
     except Exception as e:  
         return jsonify({"message": str(e), "success": False, "location": "substract balance repo"}), 409
 
-    if account.balance < amount:
-        return False
-    else:
-        return account.balance - amount
+    return account.balance - amount
     
-def add_balance(account_id, amount):
-    try:
-        account = account_by_account_id_repo(account_id)
+# def add_balance_calculator(account_id, amount):
+#     try:
+#         account = account_by_account_id_repo(account_id)
 
-    except Exception as e:
-        return jsonify({"message": str(e), "success": False, "location": "add balance repo"}), 409
+#     except Exception as e:
+#         return jsonify({"message": str(e), "success": False, "location": "add balance repo"}), 409
 
-    return account.balance + amount
+#     return account.balance + amount
 
 def currency_check(transaction_data_request):
     request_currency = transaction_data_request.currency.lower()
@@ -99,9 +98,8 @@ def initiate_transaction(transaction_data_request, user_auth_data):
     account_checker(user_auth_data.get("id"), from_account_id, to_account_id=None)
 
     # case 1
-    if transaction_type == "transfer" or transaction_type == "withdrawal":
-
-        if not to_account_id:
+    if transaction_type == "transfer":
+        if to_account_id is None:
             return jsonify(
                 {
                     "message": "To account id is required",
@@ -109,51 +107,88 @@ def initiate_transaction(transaction_data_request, user_auth_data):
                 }
             ), 400
 
-        source_new_balance = substract_balance(from_account_id, amount)
-
-        if source_new_balance is False:
-            return jsonify(
-                {
-                    "message": "Insufficient balance",
-                    "success": False,
-                }
-            ), 400
-        
-        # update account balance
         try:
-            modify_account_balance_repo(from_account_id, source_new_balance, transaction_data_validated)
+            source_final_balance = substract_balance_calculator(from_account_id, amount)
 
-        except Exception as e:
-            return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
+            if source_final_balance < 0:
+                return jsonify(
+                    {
+                        "message": "Insufficient balance",
+                        "success": False,
+                    }
+                ), 400
+
+            # modify source account balance
+            modify_account_balance_repo(from_account_id, amount, "-", transaction_data_validated)
+
         
-        if to_account_id:
-            target_new_balance = add_balance(to_account_id, amount)
+            # modify target account balance
+            modify_account_balance_repo(to_account_id, amount, "+", transaction_data_validated)
 
-            try:
-                modify_account_balance_repo(to_account_id, target_new_balance, transaction_data_validated)
+            # register transaction
+            create_transaction_repo(transaction_data_validated)
 
-            except Exception as e:
-                return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
+            db.session.commit()
 
-        # register transaction
-        create_transaction_repo(transaction_data_validated)
+        except SQLAlchemyError as e:
+            db.session.rollback()
 
+            return jsonify({"message": str(e), "success": False, "location": "transfer modify account balance repo"}), 409
+
+        
     # case 2
-    elif transaction_type == "deposit":
-
-        target_new_balance = add_balance(from_account_id, amount)
-
+    elif transaction_type == "withdraw":
         try:
-            modify_account_balance_repo(from_account_id, target_new_balance, transaction_data_validated)
+            source_final_balance = substract_balance_calculator(from_account_id, amount)
 
-        except Exception as e:
-            return jsonify({"message": str(e), "success": False, "location": "transaction modify account balance repo"}), 409
+            if source_final_balance < 0:
+                return jsonify(
+                    {
+                        "message": "Insufficient balance",
+                        "success": False,
+                    }
+                ), 400
+            
+            # modify source account balance
+            modify_account_balance_repo(from_account_id, amount, "-", transaction_data_validated)
+
+            # register transaction
+            create_transaction_repo(transaction_data_validated)
+
+            db.session.commit()
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+
+            return jsonify({"message": str(e), "success": False, "location": "withdraw modify account balance repo"}), 409
         
-        # register transaction
-        create_transaction_repo(transaction_data_validated)
-
 
     # case 3
+    elif transaction_type == "deposit":
+        try:
+            # modify account balance
+            modify_account_balance_repo(
+                from_account_id, amount, "+", transaction_data_validated
+            )
+
+            # register transaction
+            create_transaction_repo(transaction_data_validated)
+
+            db.session.commit()
+
+        except SQLAlchemyError as e:
+            db.session.rollback()
+
+            return jsonify(
+                {
+                    "message": str(e),
+                    "success": False,
+                    "location": "deposit modify account balance repo",
+                }
+            ), 409
+
+
+    # case 4
     else:
         return jsonify(
             {

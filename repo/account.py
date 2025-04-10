@@ -60,18 +60,23 @@ def account_by_user_id_repo(user_id):
     # .all() returns in list form
     return accounts.all()
 
-def modify_account_balance_repo(account_id, new_amount, transaction_data):
+def modify_account_balance_repo(account_id, amount, operator,  transaction_data):
+
     account = db.one_or_404(
         db.select(AccountsModel).filter_by(id=account_id),
         description=f"No user with account id '{account_id}'.",
     )
 
-    account.balance = new_amount
+    if operator == "+":
+        account.balance += amount
+
+    elif operator == "-":
+        account.balance -= amount
 
     if transaction_data.testing:
-       account.updated_at = testing_datetime(str(now_testing()))
+        account.updated_at = testing_datetime(str(now_testing()))
 
-    db.session.commit()
+    
 
 
 

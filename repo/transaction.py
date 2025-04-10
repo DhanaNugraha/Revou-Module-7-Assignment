@@ -17,7 +17,7 @@ def create_transaction_repo(transaction_data):
         new_transaction.created_at = testing_datetime(str(now_testing()))
 
     db.session.add(new_transaction)
-    db.session.commit()
+    # db.session.commit()
 
 def account_transactions_repo(from_account_id):
     transactions = db.session.execute(db.select(TransactionsModel.id).filter_by(from_account_id=from_account_id)).scalars()

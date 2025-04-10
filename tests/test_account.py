@@ -12,7 +12,7 @@ def test_register_account(
         "/accounts", headers=mock_admin_token_data, json=mock_account_data
     )
 
-    print(response.json)
+    # print(response.json)
 
     assert response.status_code == 200
     assert response.json["success"] is True

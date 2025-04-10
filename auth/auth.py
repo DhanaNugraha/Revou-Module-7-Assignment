@@ -1,5 +1,4 @@
 from functools import wraps
-import os
 from flask import jsonify, request
 from repo.user import user_by_id_repo
 
