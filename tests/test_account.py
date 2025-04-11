@@ -9,7 +9,7 @@ def test_register_account(
     client, mock_admin_token_data, mock_account_data, users_data_inject, db
 ):
     response = client.post(
-        "/accounts", headers=mock_admin_token_data, json=mock_account_data
+        "/accounts/1", headers=mock_admin_token_data, json=mock_account_data
     )
 
     # print(response.json)
@@ -28,7 +28,7 @@ def test_register_account_missing_field(
     client, mock_admin_token_data, mock_account_data, users_data_inject
 ):
     mock_account_data.pop("currency")
-    response = client.post("/accounts", headers=mock_admin_token_data, json=mock_account_data)
+    response = client.post("/accounts/1", headers=mock_admin_token_data, json=mock_account_data)
 
     assert response.status_code == 400
     assert response.json["success"] is False
@@ -39,7 +39,7 @@ def test_register_account_repo_error(
     client, mock_admin_token_data, mock_account_data, users_data_inject
 ):
     mock_account_data.pop("testing")
-    response = client.post("/accounts", headers=mock_admin_token_data, json=mock_account_data)
+    response = client.post("/accounts/1", headers=mock_admin_token_data, json=mock_account_data)
 
     assert response.status_code == 409
     assert response.json["success"] is False

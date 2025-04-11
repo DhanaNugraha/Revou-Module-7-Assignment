@@ -13,14 +13,14 @@ def accounts_api():
         case "get":
             return get_user_accounts(request.user)
 
-@accounts_router.route("", methods=["POST"])
+@accounts_router.route("/<user_id>", methods=["POST"])
 @login_required
 @admin_required
-def accounts_api_admin():
+def accounts_api_admin(user_id):
     match request.method.lower():
         # create new accounts (add to user db and accounts db)
         case "post":
-            return register_account(request.json, request.user)
+            return register_account(request.json, user_id)
 
 @accounts_router.route("/<account_id>", methods=["GET"])
 @login_required
@@ -30,7 +30,7 @@ def accounts_by_id(account_id):
         case "get":
             return get_account_details(account_id)
         
-@accounts_router.route("/<account_id>", methods=["PUT", "DELETE"])
+@accounts_router.route("/<account_id>", methods=["PUT", "POST", "DELETE"])
 @login_required
 @admin_required
 def accounts_by_id_admin(account_id):

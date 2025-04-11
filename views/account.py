@@ -9,7 +9,7 @@ class AccountRequest(BaseModel):
     account_type: str   
     testing: Optional[str] = None
 
-def register_account(account_data_request, user_auth_data):
+def register_account(account_data_request, user_id):
     try:
         account_data_validated = AccountRequest.model_validate(account_data_request)
 
@@ -24,9 +24,6 @@ def register_account(account_data_request, user_auth_data):
 
     except Exception as e:
         return jsonify({"message": str(e), "success": False, "location": "account number checker"}), 409
-    
-    # insert acc number and user id
-    user_id = user_auth_data.get("id")
 
     try:
         create_account_repo(account_data_validated, user_id, account_number)

@@ -1,3 +1,4 @@
+from sqlalchemy import or_
 from instance.database import db
 from models.transaction import TransactionsModel
 from shared.time import now_testing, testing_datetime
@@ -19,8 +20,15 @@ def create_transaction_repo(transaction_data):
     db.session.add(new_transaction)
     # db.session.commit()
 
-def account_transactions_repo(from_account_id):
-    transactions = db.session.execute(db.select(TransactionsModel.id).filter_by(from_account_id=from_account_id)).scalars()
+def account_transactions_repo(account_ids_list):
+    transactions = db.session.execute(
+        db.select(TransactionsModel.id).where(
+            or_(
+                TransactionsModel.to_account_id.in_(account_ids_list),
+                TransactionsModel.from_account_id.in_(account_ids_list),
+            )
+        )
+    ).scalars()
     
     return transactions.all()
 

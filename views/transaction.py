@@ -211,21 +211,17 @@ def get_user_account_transactions(user_auth_data):
     user_id = user_auth_data.get("id")
 
     try:
-        user_accounts = account_by_user_id_repo(user_id)
+        user_account_ids = account_by_user_id_repo(user_id)
 
     except Exception as e:
         return jsonify({"message": str(e), "success": False, "location": "get user accounts repo"}), 400
+    
+    try:
+        transactions = account_transactions_repo(user_account_ids)
 
-    transactions = []
+    except Exception as e:
+        return jsonify({"message": str(e), "success": False, "location": "get account transactions repo"}), 409
 
-    for from_account_id in user_accounts:
-        try:
-            account_transactions = account_transactions_repo(from_account_id)
-
-        except Exception as e:
-            return jsonify({"message": str(e), "success": False, "location": "get account transactions repo"}), 409
-
-        transactions.extend(account_transactions)
 
     return jsonify({"data": transactions, "success": True}), 200
 
