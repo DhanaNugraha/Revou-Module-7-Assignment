@@ -58,7 +58,7 @@ This API is deployed using **Koyeb**  with the following base url for the API re
 `mad-adriane-dhanapersonal-9be85724.koyeb.app/`
 
 ## Database Schema Documentation
-<img src="assets\database-schema.png">
+<img src="https://github.com/DhanaNugraha/Revou-Module-7-Assignment/blob/main/assets/database-schema.png">
 
 
 ## Contributing
