@@ -57,6 +57,9 @@ The full documentation of each endpoints, along with their request requirements 
 This API is deployed using **Koyeb**  with the following base url for the API request.
 `mad-adriane-dhanapersonal-9be85724.koyeb.app/`
 
+## Database Schema Documentation
+<img src="assets\database-schema.png">
+
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
