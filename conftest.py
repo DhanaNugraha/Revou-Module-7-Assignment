@@ -175,7 +175,7 @@ def mock_admin_data():
         "password": "password123",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": testing_datetime(str(now_testing())),
+        "date_of_birth": "1990-01-01",
         "testing": "true",
         "admin_token": "admin-token-testing",
     }
@@ -189,8 +189,7 @@ def mock_user_data():
         "password": "password123",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": testing_datetime(str(now_testing())),
-        "testing": "true",
+        "date_of_birth": "1990-01-01",
     }
 
 @pytest.fixture
@@ -217,8 +216,7 @@ def mock_update_user_data():
         "password": "password1234556",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": testing_datetime(str(now_testing())),
-        "testing": "true",
+        "date_of_birth": "1990-01-01",
     }
 
 @pytest.fixture
@@ -230,7 +228,7 @@ def mock_update_user_to_admin_data():
         "password": "password1234556",
         "phone_number": "+1234567890",
         "address": "tess",
-        "date_of_birth": testing_datetime(str(now_testing())),
+        "date_of_birth": "1990-01-01",
         "testing": "true",
         "admin_token": "admin-token-testing",
     }

@@ -40,7 +40,7 @@ def test_register_user_missing_field(client, mock_user_data, users_data_inject):
     assert register_user.json["location"] == "user data validation"
 
 def test_register_repo_error(client, mock_user_data, users_data_inject):
-    mock_user_data.pop("testing")
+    mock_user_data.update({"date_of_birth" : "2000-01-01 10:00:00"})
     register_user = client.post("/users", json=mock_user_data)
 
     assert register_user.status_code == 409
@@ -79,6 +79,7 @@ def test_update_user_to_admin(
     user = db.session.execute(
         db.select(UsersModel).filter_by(email="john.doe@example.com")
     ).scalar_one()
+    
 
     assert user.id == 1
     assert user.address == "tess"
@@ -111,7 +112,7 @@ def test_update_user_wrong_email(
 def test_update_user_repo_error(
     client, mock_update_user_data, mock_token_data, users_data_inject
 ):
-    mock_update_user_data.pop("testing")
+    mock_update_user_data.update({"date_of_birth" : "2000-01-01 10:00:00"})
     response = client.put(
         "/users/me", headers=mock_token_data, json=mock_update_user_data
     )
